@@ -155,6 +155,130 @@ class CustomersAppsResource {
     return GoogleChromeManagementV1CountChromeAppRequestsResponse.fromJson(
         response_ as core.Map<core.String, core.dynamic>);
   }
+
+  /// Get a list of devices that have requested to install an extension.
+  ///
+  /// Request parameters:
+  ///
+  /// [customer] - Required. The customer ID or "my_customer" prefixed with
+  /// "customers/".
+  /// Value must have pattern `^customers/\[^/\]+$`.
+  ///
+  /// [extensionId] - Required. The extension for which we want to find
+  /// requesting devices.
+  ///
+  /// [orgUnitId] - The ID of the organizational unit. Only consider devices
+  /// that directly belong to this org unit, i.e. sub-orgunits are not counted.
+  /// If omitted, all data will be returned.
+  ///
+  /// [pageSize] - Optional. Maximum number of results to return. Maximum and
+  /// default are 50. Any page size larger than 50 will be coerced to 50.
+  ///
+  /// [pageToken] - Optional. Token to specify the page of the request to be
+  /// returned. Token expires after 1 day.
+  ///
+  /// [$fields] - Selector specifying which fields to include in a partial
+  /// response.
+  ///
+  /// Completes with a
+  /// [GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse].
+  ///
+  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
+  /// error.
+  ///
+  /// If the used [http.Client] completes with an error when making a REST call,
+  /// this method will complete with the same error.
+  async.Future<GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse>
+      fetchDevicesRequestingExtension(
+    core.String customer, {
+    core.String? extensionId,
+    core.String? orgUnitId,
+    core.int? pageSize,
+    core.String? pageToken,
+    core.String? $fields,
+  }) async {
+    final queryParams_ = <core.String, core.List<core.String>>{
+      if (extensionId != null) 'extensionId': [extensionId],
+      if (orgUnitId != null) 'orgUnitId': [orgUnitId],
+      if (pageSize != null) 'pageSize': ['${pageSize}'],
+      if (pageToken != null) 'pageToken': [pageToken],
+      if ($fields != null) 'fields': [$fields],
+    };
+
+    final url_ = 'v1/' +
+        core.Uri.encodeFull('$customer') +
+        '/apps:fetchDevicesRequestingExtension';
+
+    final response_ = await _requester.request(
+      url_,
+      'GET',
+      queryParams: queryParams_,
+    );
+    return GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse
+        .fromJson(response_ as core.Map<core.String, core.dynamic>);
+  }
+
+  /// Get a list of users that have requested to install an extension.
+  ///
+  /// Request parameters:
+  ///
+  /// [customer] - Required. The customer ID or "my_customer" prefixed with
+  /// "customers/".
+  /// Value must have pattern `^customers/\[^/\]+$`.
+  ///
+  /// [extensionId] - Required. The extension for which we want to find the
+  /// requesting users.
+  ///
+  /// [orgUnitId] - The ID of the organizational unit. Only consider devices
+  /// that directly belong to this org unit, i.e. sub-orgunits are not counted.
+  /// If omitted, all data will be returned.
+  ///
+  /// [pageSize] - Optional. Maximum number of results to return. Maximum and
+  /// default are 50. Any page size larger than 50 will be coerced to 50.
+  ///
+  /// [pageToken] - Optional. Token to specify the page of the request to be
+  /// returned. Token expires after 1 day.
+  ///
+  /// [$fields] - Selector specifying which fields to include in a partial
+  /// response.
+  ///
+  /// Completes with a
+  /// [GoogleChromeManagementV1FetchUsersRequestingExtensionResponse].
+  ///
+  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
+  /// error.
+  ///
+  /// If the used [http.Client] completes with an error when making a REST call,
+  /// this method will complete with the same error.
+  async.Future<GoogleChromeManagementV1FetchUsersRequestingExtensionResponse>
+      fetchUsersRequestingExtension(
+    core.String customer, {
+    core.String? extensionId,
+    core.String? orgUnitId,
+    core.int? pageSize,
+    core.String? pageToken,
+    core.String? $fields,
+  }) async {
+    final queryParams_ = <core.String, core.List<core.String>>{
+      if (extensionId != null) 'extensionId': [extensionId],
+      if (orgUnitId != null) 'orgUnitId': [orgUnitId],
+      if (pageSize != null) 'pageSize': ['${pageSize}'],
+      if (pageToken != null) 'pageToken': [pageToken],
+      if ($fields != null) 'fields': [$fields],
+    };
+
+    final url_ = 'v1/' +
+        core.Uri.encodeFull('$customer') +
+        '/apps:fetchUsersRequestingExtension';
+
+    final response_ = await _requester.request(
+      url_,
+      'GET',
+      queryParams: queryParams_,
+    );
+    return GoogleChromeManagementV1FetchUsersRequestingExtensionResponse
+        .fromJson(response_ as core.Map<core.String, core.dynamic>);
+  }
 }
 
 class CustomersAppsAndroidResource {
@@ -348,6 +472,63 @@ class CustomersReportsResource {
     );
     return GoogleChromeManagementV1CountChromeBrowsersNeedingAttentionResponse
         .fromJson(response_ as core.Map<core.String, core.dynamic>);
+  }
+
+  /// Get a count of Chrome crash events.
+  ///
+  /// Request parameters:
+  ///
+  /// [customer] - Customer ID.
+  /// Value must have pattern `^customers/\[^/\]+$`.
+  ///
+  /// [filter] - Query string to filter results, AND-separated fields in EBNF
+  /// syntax. Supported filter fields: * major_browser_version *
+  /// minor_browser_version * browser_channel * device_platform *
+  /// past_number_days Example: `major_browser_version = 'M115' AND
+  /// past_number_days = '28'`.
+  ///
+  /// [orderBy] - Field used to order results. Supported order by fields: *
+  /// browser_version * count * date
+  ///
+  /// [orgUnitId] - If specified, only count the number of crash events of the
+  /// devices in this organizational unit.
+  ///
+  /// [$fields] - Selector specifying which fields to include in a partial
+  /// response.
+  ///
+  /// Completes with a [GoogleChromeManagementV1CountChromeCrashEventsResponse].
+  ///
+  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
+  /// error.
+  ///
+  /// If the used [http.Client] completes with an error when making a REST call,
+  /// this method will complete with the same error.
+  async.Future<GoogleChromeManagementV1CountChromeCrashEventsResponse>
+      countChromeCrashEvents(
+    core.String customer, {
+    core.String? filter,
+    core.String? orderBy,
+    core.String? orgUnitId,
+    core.String? $fields,
+  }) async {
+    final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
+      if (orderBy != null) 'orderBy': [orderBy],
+      if (orgUnitId != null) 'orgUnitId': [orgUnitId],
+      if ($fields != null) 'fields': [$fields],
+    };
+
+    final url_ = 'v1/' +
+        core.Uri.encodeFull('$customer') +
+        '/reports:countChromeCrashEvents';
+
+    final response_ = await _requester.request(
+      url_,
+      'GET',
+      queryParams: queryParams_,
+    );
+    return GoogleChromeManagementV1CountChromeCrashEventsResponse.fromJson(
+        response_ as core.Map<core.String, core.dynamic>);
   }
 
   /// Generate report of the number of devices expiring in each month of the
@@ -981,6 +1162,15 @@ class CustomersTelemetryDevicesResource {
   /// Value must have pattern `^customers/\[^/\]+/telemetry/devices/\[^/\]+$`.
   ///
   /// [readMask] - Required. Read mask to specify which fields to return.
+  /// Supported read_mask paths are: - name - org_unit_id - device_id -
+  /// serial_number - cpu_info - cpu_status_report - memory_info -
+  /// memory_status_report - network_info - network_diagnostics_report -
+  /// network_status_report - os_update_status - graphics_info -
+  /// graphics_status_report - battery_info - battery_status_report -
+  /// storage_info - storage_status_report - thunderbolt_info -
+  /// audio_status_report - boot_performance_report - heartbeat_status_report -
+  /// network_bandwidth_report - peripherals_report - kiosk_app_status_report -
+  /// app_report - runtime_counters_report
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -1022,12 +1212,14 @@ class CustomersTelemetryDevicesResource {
   /// Value must have pattern `^customers/\[^/\]+$`.
   ///
   /// [filter] - Optional. Only include resources that match the filter.
-  /// Supported filter fields: - org_unit_id - serial_number - device_id -
-  /// reports_timestamp The "reports_timestamp" filter accepts either the Unix
-  /// Epoch milliseconds format or the RFC3339 UTC "Zulu" format with nanosecond
-  /// resolution and up to nine fractional digits. Both formats should be
-  /// surrounded by simple double quotes. Examples: "2014-10-02T15:01:23Z",
-  /// "2014-10-02T15:01:23.045123456Z", "1679283943823".
+  /// Requests that don't specify a "reports_timestamp" value will default to
+  /// returning only recent reports. Specify "reports_timestamp\>=0" to get all
+  /// report data. Supported filter fields: - org_unit_id - serial_number -
+  /// device_id - reports_timestamp The "reports_timestamp" filter accepts
+  /// either the Unix Epoch milliseconds format or the RFC3339 UTC "Zulu" format
+  /// with nanosecond resolution and up to nine fractional digits. Both formats
+  /// should be surrounded by simple double quotes. Examples:
+  /// "2014-10-02T15:01:23Z", "2014-10-02T15:01:23.045123456Z", "1679283943823".
   ///
   /// [pageSize] - Maximum number of results to return. Default value is 100.
   /// Maximum value is 1000.
@@ -1035,6 +1227,15 @@ class CustomersTelemetryDevicesResource {
   /// [pageToken] - Token to specify next page in the list.
   ///
   /// [readMask] - Required. Read mask to specify which fields to return.
+  /// Supported read_mask paths are: - name - org_unit_id - device_id -
+  /// serial_number - cpu_info - cpu_status_report - memory_info -
+  /// memory_status_report - network_info - network_diagnostics_report -
+  /// network_status_report - os_update_status - graphics_info -
+  /// graphics_status_report - battery_info - battery_status_report -
+  /// storage_info - storage_status_report - thunderbolt_info -
+  /// audio_status_report - boot_performance_report - heartbeat_status_report -
+  /// network_bandwidth_report - peripherals_report - kiosk_app_status_report -
+  /// app_report - runtime_counters_report
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -1105,7 +1306,12 @@ class CustomersTelemetryEventsResource {
   ///
   /// [readMask] - Required. Read mask to specify which fields to return.
   /// Although currently required, this field will become optional, while the
-  /// filter parameter with an event type will be come required.
+  /// filter parameter with an event type will be come required. Supported
+  /// read_mask paths are: - device - user - audio_severe_underrun_event -
+  /// usb_peripherals_event - https_latency_change_event -
+  /// network_state_change_event - wifi_signal_strength_event -
+  /// vpn_connection_state_change_event - app_install_event -
+  /// app_uninstall_event - app_launch_event
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -1302,7 +1508,11 @@ class CustomersTelemetryUsersResource {
   /// [name] - Required. Name of the `TelemetryUser` to return.
   /// Value must have pattern `^customers/\[^/\]+/telemetry/users/\[^/\]+$`.
   ///
-  /// [readMask] - Read mask to specify which fields to return.
+  /// [readMask] - Read mask to specify which fields to return. Supported
+  /// read_mask paths are: - name - org_unit_id - user_id - user_email -
+  /// user_device.device_id - user_device.audio_status_report -
+  /// user_device.device_activity_report - user_device.network_bandwidth_report
+  /// - user_device.peripherals_report
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -1351,7 +1561,11 @@ class CustomersTelemetryUsersResource {
   ///
   /// [pageToken] - Token to specify next page in the list.
   ///
-  /// [readMask] - Read mask to specify which fields to return.
+  /// [readMask] - Read mask to specify which fields to return. Supported
+  /// read_mask paths are: - name - org_unit_id - user_id - user_email -
+  /// user_device.device_id - user_device.audio_status_report -
+  /// user_device.device_activity_report - user_device.network_bandwidth_report
+  /// - user_device.peripherals_report
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -2580,6 +2794,74 @@ class GoogleChromeManagementV1CountChromeBrowsersNeedingAttentionResponse {
       };
 }
 
+/// Response contains a list of CrashEventCountByVersionPerDay which count the
+/// chrome crash at the certain date.
+class GoogleChromeManagementV1CountChromeCrashEventsResponse {
+  /// Crash event counts grouped by date and browser version.
+  core.List<
+          GoogleChromeManagementV1CountChromeCrashEventsResponseCrashEventCount>?
+      crashEventCounts;
+
+  GoogleChromeManagementV1CountChromeCrashEventsResponse({
+    this.crashEventCounts,
+  });
+
+  GoogleChromeManagementV1CountChromeCrashEventsResponse.fromJson(
+      core.Map json_)
+      : this(
+          crashEventCounts: json_.containsKey('crashEventCounts')
+              ? (json_['crashEventCounts'] as core.List)
+                  .map((value) =>
+                      GoogleChromeManagementV1CountChromeCrashEventsResponseCrashEventCount
+                          .fromJson(
+                              value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (crashEventCounts != null) 'crashEventCounts': crashEventCounts!,
+      };
+}
+
+/// The `count` of the Chrome crash events at the `date`.
+class GoogleChromeManagementV1CountChromeCrashEventsResponseCrashEventCount {
+  /// Browser version this is counting.
+  core.String? browserVersion;
+
+  /// Total count of crash events.
+  core.String? count;
+
+  /// Date of the crash event.
+  GoogleTypeDate? date;
+
+  GoogleChromeManagementV1CountChromeCrashEventsResponseCrashEventCount({
+    this.browserVersion,
+    this.count,
+    this.date,
+  });
+
+  GoogleChromeManagementV1CountChromeCrashEventsResponseCrashEventCount.fromJson(
+      core.Map json_)
+      : this(
+          browserVersion: json_.containsKey('browserVersion')
+              ? json_['browserVersion'] as core.String
+              : null,
+          count:
+              json_.containsKey('count') ? json_['count'] as core.String : null,
+          date: json_.containsKey('date')
+              ? GoogleTypeDate.fromJson(
+                  json_['date'] as core.Map<core.String, core.dynamic>)
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (browserVersion != null) 'browserVersion': browserVersion!,
+        if (count != null) 'count': count!,
+        if (date != null) 'date': date!,
+      };
+}
+
 /// Response containing a list of devices expiring in each month of a selected
 /// time frame.
 ///
@@ -3288,6 +3570,37 @@ class GoogleChromeManagementV1DeviceHardwareCountReport {
       };
 }
 
+/// Details of a device requesting an extension, including the name of the
+/// device and the justification of the request.
+class GoogleChromeManagementV1DeviceRequestingExtensionDetails {
+  /// The name of a device that has requested the extension.
+  core.String? deviceName;
+
+  /// Request justification as entered by the user.
+  core.String? justification;
+
+  GoogleChromeManagementV1DeviceRequestingExtensionDetails({
+    this.deviceName,
+    this.justification,
+  });
+
+  GoogleChromeManagementV1DeviceRequestingExtensionDetails.fromJson(
+      core.Map json_)
+      : this(
+          deviceName: json_.containsKey('deviceName')
+              ? json_['deviceName'] as core.String
+              : null,
+          justification: json_.containsKey('justification')
+              ? json_['justification'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (deviceName != null) 'deviceName': deviceName!,
+        if (justification != null) 'justification': justification!,
+      };
+}
+
 /// Status of the single storage device.
 class GoogleChromeManagementV1DiskInfo {
   /// Number of bytes read since last boot.
@@ -3635,6 +3948,102 @@ class GoogleChromeManagementV1EnumeratePrintJobsResponse {
         if (nextPageToken != null) 'nextPageToken': nextPageToken!,
         if (printJobs != null) 'printJobs': printJobs!,
         if (totalSize != null) 'totalSize': totalSize!,
+      };
+}
+
+/// Response containing a list of devices that have requested the queried
+/// extension.
+class GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse {
+  /// Details of devices that have requested the queried extension.
+  core.List<GoogleChromeManagementV1DeviceRequestingExtensionDetails>?
+      deviceDetails;
+
+  /// Token to specify the next page in the list.
+  ///
+  /// Token expires after 1 day.
+  ///
+  /// Optional.
+  core.String? nextPageToken;
+
+  /// Total number of devices in response.
+  ///
+  /// Optional.
+  core.int? totalSize;
+
+  GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse({
+    this.deviceDetails,
+    this.nextPageToken,
+    this.totalSize,
+  });
+
+  GoogleChromeManagementV1FetchDevicesRequestingExtensionResponse.fromJson(
+      core.Map json_)
+      : this(
+          deviceDetails: json_.containsKey('deviceDetails')
+              ? (json_['deviceDetails'] as core.List)
+                  .map((value) =>
+                      GoogleChromeManagementV1DeviceRequestingExtensionDetails
+                          .fromJson(
+                              value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
+          nextPageToken: json_.containsKey('nextPageToken')
+              ? json_['nextPageToken'] as core.String
+              : null,
+          totalSize: json_.containsKey('totalSize')
+              ? json_['totalSize'] as core.int
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (deviceDetails != null) 'deviceDetails': deviceDetails!,
+        if (nextPageToken != null) 'nextPageToken': nextPageToken!,
+        if (totalSize != null) 'totalSize': totalSize!,
+      };
+}
+
+/// Response containing a list of users that have requested the queried
+/// extension.
+class GoogleChromeManagementV1FetchUsersRequestingExtensionResponse {
+  /// Token to specify the next page in the list.
+  core.String? nextPageToken;
+
+  /// Total number of users in response.
+  core.int? totalSize;
+
+  /// Details of users that have requested the queried extension.
+  core.List<GoogleChromeManagementV1UserRequestingExtensionDetails>?
+      userDetails;
+
+  GoogleChromeManagementV1FetchUsersRequestingExtensionResponse({
+    this.nextPageToken,
+    this.totalSize,
+    this.userDetails,
+  });
+
+  GoogleChromeManagementV1FetchUsersRequestingExtensionResponse.fromJson(
+      core.Map json_)
+      : this(
+          nextPageToken: json_.containsKey('nextPageToken')
+              ? json_['nextPageToken'] as core.String
+              : null,
+          totalSize: json_.containsKey('totalSize')
+              ? json_['totalSize'] as core.int
+              : null,
+          userDetails: json_.containsKey('userDetails')
+              ? (json_['userDetails'] as core.List)
+                  .map((value) =>
+                      GoogleChromeManagementV1UserRequestingExtensionDetails
+                          .fromJson(
+                              value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (nextPageToken != null) 'nextPageToken': nextPageToken!,
+        if (totalSize != null) 'totalSize': totalSize!,
+        if (userDetails != null) 'userDetails': userDetails!,
       };
 }
 
@@ -5087,6 +5496,73 @@ class GoogleChromeManagementV1PrinterReport {
       };
 }
 
+/// Runtime counters retrieved from CPU.
+///
+/// Currently the runtime counters telemetry is only supported by Intel vPro PSR
+/// on Gen 14+.
+class GoogleChromeManagementV1RuntimeCountersReport {
+  /// Number of times that the device has entered into the hibernation state.
+  ///
+  /// Currently obtained via the PSR, count from S0-\>S4.
+  core.String? enterHibernationCount;
+
+  /// Number of times that the device has entered into the power-off state.
+  ///
+  /// Currently obtained via the PSR, count from S0-\>S5.
+  core.String? enterPoweroffCount;
+
+  /// Number of times that the device has entered into the sleep state.
+  ///
+  /// Currently obtained via the PSR, count from S0-\>S3.
+  core.String? enterSleepCount;
+
+  /// Timestamp when the report was collected.
+  core.String? reportTime;
+
+  /// Total lifetime runtime.
+  ///
+  /// Currently always S0 runtime from Intel vPro PSR.
+  core.String? uptimeRuntimeDuration;
+
+  GoogleChromeManagementV1RuntimeCountersReport({
+    this.enterHibernationCount,
+    this.enterPoweroffCount,
+    this.enterSleepCount,
+    this.reportTime,
+    this.uptimeRuntimeDuration,
+  });
+
+  GoogleChromeManagementV1RuntimeCountersReport.fromJson(core.Map json_)
+      : this(
+          enterHibernationCount: json_.containsKey('enterHibernationCount')
+              ? json_['enterHibernationCount'] as core.String
+              : null,
+          enterPoweroffCount: json_.containsKey('enterPoweroffCount')
+              ? json_['enterPoweroffCount'] as core.String
+              : null,
+          enterSleepCount: json_.containsKey('enterSleepCount')
+              ? json_['enterSleepCount'] as core.String
+              : null,
+          reportTime: json_.containsKey('reportTime')
+              ? json_['reportTime'] as core.String
+              : null,
+          uptimeRuntimeDuration: json_.containsKey('uptimeRuntimeDuration')
+              ? json_['uptimeRuntimeDuration'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (enterHibernationCount != null)
+          'enterHibernationCount': enterHibernationCount!,
+        if (enterPoweroffCount != null)
+          'enterPoweroffCount': enterPoweroffCount!,
+        if (enterSleepCount != null) 'enterSleepCount': enterSleepCount!,
+        if (reportTime != null) 'reportTime': reportTime!,
+        if (uptimeRuntimeDuration != null)
+          'uptimeRuntimeDuration': uptimeRuntimeDuration!,
+      };
+}
+
 /// Status data for storage.
 ///
 /// * This field is telemetry information and this will change over time as the
@@ -5353,6 +5829,14 @@ class GoogleChromeManagementV1TelemetryDevice {
   /// Output only.
   core.List<GoogleChromeManagementV1PeripheralsReport>? peripheralsReport;
 
+  /// Runtime counters reports collected device lifetime runtime, as well as the
+  /// counts of S0-\>S3, S0-\>S4, and S0-\>S5 transitions, meaning entering into
+  /// sleep, hibernation, and power-off states
+  ///
+  /// Output only.
+  core.List<GoogleChromeManagementV1RuntimeCountersReport>?
+      runtimeCountersReport;
+
   /// Device serial number.
   ///
   /// This value is the same as the Admin Console's Serial Number in the
@@ -5399,6 +5883,7 @@ class GoogleChromeManagementV1TelemetryDevice {
     this.orgUnitId,
     this.osUpdateStatus,
     this.peripheralsReport,
+    this.runtimeCountersReport,
     this.serialNumber,
     this.storageInfo,
     this.storageStatusReport,
@@ -5533,6 +6018,13 @@ class GoogleChromeManagementV1TelemetryDevice {
                           value as core.Map<core.String, core.dynamic>))
                   .toList()
               : null,
+          runtimeCountersReport: json_.containsKey('runtimeCountersReport')
+              ? (json_['runtimeCountersReport'] as core.List)
+                  .map((value) =>
+                      GoogleChromeManagementV1RuntimeCountersReport.fromJson(
+                          value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
           serialNumber: json_.containsKey('serialNumber')
               ? json_['serialNumber'] as core.String
               : null,
@@ -5588,6 +6080,8 @@ class GoogleChromeManagementV1TelemetryDevice {
         if (orgUnitId != null) 'orgUnitId': orgUnitId!,
         if (osUpdateStatus != null) 'osUpdateStatus': osUpdateStatus!,
         if (peripheralsReport != null) 'peripheralsReport': peripheralsReport!,
+        if (runtimeCountersReport != null)
+          'runtimeCountersReport': runtimeCountersReport!,
         if (serialNumber != null) 'serialNumber': serialNumber!,
         if (storageInfo != null) 'storageInfo': storageInfo!,
         if (storageStatusReport != null)
@@ -6622,6 +7116,36 @@ class GoogleChromeManagementV1UserPrintReport {
         if (printerCount != null) 'printerCount': printerCount!,
         if (userEmail != null) 'userEmail': userEmail!,
         if (userId != null) 'userId': userId!,
+      };
+}
+
+/// Details of a user requesting an extension, including the email and the
+/// justification.
+class GoogleChromeManagementV1UserRequestingExtensionDetails {
+  /// The e-mail address of a user that has requested the extension.
+  core.String? email;
+
+  /// Request justification as entered by the user.
+  core.String? justification;
+
+  GoogleChromeManagementV1UserRequestingExtensionDetails({
+    this.email,
+    this.justification,
+  });
+
+  GoogleChromeManagementV1UserRequestingExtensionDetails.fromJson(
+      core.Map json_)
+      : this(
+          email:
+              json_.containsKey('email') ? json_['email'] as core.String : null,
+          justification: json_.containsKey('justification')
+              ? json_['justification'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (email != null) 'email': email!,
+        if (justification != null) 'justification': justification!,
       };
 }
 

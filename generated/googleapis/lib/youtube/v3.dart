@@ -3490,6 +3490,12 @@ class PlaylistImagesResource {
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
   ///
+  /// [uploadMedia] - The media to upload.
+  ///
+  /// [uploadOptions] - Options for the media upload. Streaming Media without
+  /// the length being known ahead of time is only supported via resumable
+  /// uploads.
+  ///
   /// Completes with a [PlaylistImage].
   ///
   /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
@@ -3502,6 +3508,8 @@ class PlaylistImagesResource {
     core.String? onBehalfOfContentOwner,
     core.List<core.String>? part,
     core.String? $fields,
+    commons.UploadOptions uploadOptions = commons.UploadOptions.defaultOptions,
+    commons.Media? uploadMedia,
   }) async {
     final body_ = convert.json.encode(request);
     final queryParams_ = <core.String, core.List<core.String>>{
@@ -3511,13 +3519,22 @@ class PlaylistImagesResource {
       if ($fields != null) 'fields': [$fields],
     };
 
-    const url_ = 'youtube/v3/playlistImages';
+    core.String url_;
+    if (uploadMedia == null) {
+      url_ = 'youtube/v3/playlistImages';
+    } else if (uploadOptions is commons.ResumableUploadOptions) {
+      url_ = '/resumable/upload/youtube/v3/playlistImages';
+    } else {
+      url_ = '/upload/youtube/v3/playlistImages';
+    }
 
     final response_ = await _requester.request(
       url_,
       'PUT',
       body: body_,
       queryParams: queryParams_,
+      uploadMedia: uploadMedia,
+      uploadOptions: uploadOptions,
     );
     return PlaylistImage.fromJson(
         response_ as core.Map<core.String, core.dynamic>);
@@ -8043,6 +8060,9 @@ class ChannelSettings {
 
   /// Whether user-submitted comments left on the channel page need to be
   /// approved by the channel owner to be publicly visible.
+  @core.Deprecated(
+    'Not supported. Member documentation may have more information.',
+  )
   core.bool? moderateComments;
 
   /// A prominent color that can be rendered on this channel page.
@@ -12436,6 +12456,9 @@ class LiveChatMessageDeletedDetails {
 }
 
 class LiveChatMessageListResponse {
+  /// Set when there is an active poll.
+  LiveChatMessage? activePollItem;
+
   /// Etag of this resource.
   core.String? etag;
 
@@ -12472,6 +12495,7 @@ class LiveChatMessageListResponse {
   core.String? visitorId;
 
   LiveChatMessageListResponse({
+    this.activePollItem,
     this.etag,
     this.eventId,
     this.items,
@@ -12486,6 +12510,10 @@ class LiveChatMessageListResponse {
 
   LiveChatMessageListResponse.fromJson(core.Map json_)
       : this(
+          activePollItem: json_.containsKey('activePollItem')
+              ? LiveChatMessage.fromJson(json_['activePollItem']
+                  as core.Map<core.String, core.dynamic>)
+              : null,
           etag: json_.containsKey('etag') ? json_['etag'] as core.String : null,
           eventId: json_.containsKey('eventId')
               ? json_['eventId'] as core.String
@@ -12520,6 +12548,7 @@ class LiveChatMessageListResponse {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
+        if (activePollItem != null) 'activePollItem': activePollItem!,
         if (etag != null) 'etag': etag!,
         if (eventId != null) 'eventId': eventId!,
         if (items != null) 'items': items!,

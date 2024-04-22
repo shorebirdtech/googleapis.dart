@@ -1328,6 +1328,53 @@ class RoutinesResource {
     return Routine.fromJson(response_ as core.Map<core.String, core.dynamic>);
   }
 
+  /// Gets the access control policy for a resource.
+  ///
+  /// Returns an empty policy if the resource exists and does not have a policy
+  /// set.
+  ///
+  /// [request] - The metadata request object.
+  ///
+  /// Request parameters:
+  ///
+  /// [resource] - REQUIRED: The resource for which the policy is being
+  /// requested. See
+  /// [Resource names](https://cloud.google.com/apis/design/resource_names) for
+  /// the appropriate value for this field.
+  /// Value must have pattern
+  /// `^projects/\[^/\]+/datasets/\[^/\]+/routines/\[^/\]+$`.
+  ///
+  /// [$fields] - Selector specifying which fields to include in a partial
+  /// response.
+  ///
+  /// Completes with a [Policy].
+  ///
+  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
+  /// error.
+  ///
+  /// If the used [http.Client] completes with an error when making a REST call,
+  /// this method will complete with the same error.
+  async.Future<Policy> getIamPolicy(
+    GetIamPolicyRequest request,
+    core.String resource, {
+    core.String? $fields,
+  }) async {
+    final body_ = convert.json.encode(request);
+    final queryParams_ = <core.String, core.List<core.String>>{
+      if ($fields != null) 'fields': [$fields],
+    };
+
+    final url_ = core.Uri.encodeFull('$resource') + ':getIamPolicy';
+
+    final response_ = await _requester.request(
+      url_,
+      'POST',
+      body: body_,
+      queryParams: queryParams_,
+    );
+    return Policy.fromJson(response_ as core.Map<core.String, core.dynamic>);
+  }
+
   /// Creates a new routine in the dataset.
   ///
   /// [request] - The metadata request object.
@@ -1446,6 +1493,53 @@ class RoutinesResource {
     );
     return ListRoutinesResponse.fromJson(
         response_ as core.Map<core.String, core.dynamic>);
+  }
+
+  /// Sets the access control policy on the specified resource.
+  ///
+  /// Replaces any existing policy. Can return `NOT_FOUND`, `INVALID_ARGUMENT`,
+  /// and `PERMISSION_DENIED` errors.
+  ///
+  /// [request] - The metadata request object.
+  ///
+  /// Request parameters:
+  ///
+  /// [resource] - REQUIRED: The resource for which the policy is being
+  /// specified. See
+  /// [Resource names](https://cloud.google.com/apis/design/resource_names) for
+  /// the appropriate value for this field.
+  /// Value must have pattern
+  /// `^projects/\[^/\]+/datasets/\[^/\]+/routines/\[^/\]+$`.
+  ///
+  /// [$fields] - Selector specifying which fields to include in a partial
+  /// response.
+  ///
+  /// Completes with a [Policy].
+  ///
+  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
+  /// error.
+  ///
+  /// If the used [http.Client] completes with an error when making a REST call,
+  /// this method will complete with the same error.
+  async.Future<Policy> setIamPolicy(
+    SetIamPolicyRequest request,
+    core.String resource, {
+    core.String? $fields,
+  }) async {
+    final body_ = convert.json.encode(request);
+    final queryParams_ = <core.String, core.List<core.String>>{
+      if ($fields != null) 'fields': [$fields],
+    };
+
+    final url_ = core.Uri.encodeFull('$resource') + ':setIamPolicy';
+
+    final response_ = await _requester.request(
+      url_,
+      'POST',
+      body: body_,
+      queryParams: queryParams_,
+    );
+    return Policy.fromJson(response_ as core.Map<core.String, core.dynamic>);
   }
 
   /// Updates information in an existing routine.
@@ -4795,6 +4889,15 @@ class Dataset {
   /// Output only.
   core.String? etag;
 
+  /// Options defining open source compatible datasets living in the BigQuery
+  /// catalog.
+  ///
+  /// Contains metadata of open source database, schema or namespace represented
+  /// by the current dataset.
+  ///
+  /// Optional.
+  ExternalCatalogDatasetOptions? externalCatalogDatasetOptions;
+
   /// Reference to a read-only external dataset defined in data catalogs outside
   /// of BigQuery.
   ///
@@ -4844,6 +4947,13 @@ class Dataset {
   ///
   /// Output only.
   core.String? lastModifiedTime;
+
+  /// Metadata about the LinkedDataset.
+  ///
+  /// Filled out when the dataset type is LINKED.
+  ///
+  /// Output only.
+  LinkedDatasetMetadata? linkedDatasetMetadata;
 
   /// The source dataset reference when the dataset is of type LINKED.
   ///
@@ -4921,6 +5031,7 @@ class Dataset {
     this.defaultTableExpirationMs,
     this.description,
     this.etag,
+    this.externalCatalogDatasetOptions,
     this.externalDatasetReference,
     this.friendlyName,
     this.id,
@@ -4928,6 +5039,7 @@ class Dataset {
     this.kind,
     this.labels,
     this.lastModifiedTime,
+    this.linkedDatasetMetadata,
     this.linkedDatasetSource,
     this.location,
     this.maxTimeTravelHours,
@@ -4978,6 +5090,12 @@ class Dataset {
               ? json_['description'] as core.String
               : null,
           etag: json_.containsKey('etag') ? json_['etag'] as core.String : null,
+          externalCatalogDatasetOptions:
+              json_.containsKey('externalCatalogDatasetOptions')
+                  ? ExternalCatalogDatasetOptions.fromJson(
+                      json_['externalCatalogDatasetOptions']
+                          as core.Map<core.String, core.dynamic>)
+                  : null,
           externalDatasetReference:
               json_.containsKey('externalDatasetReference')
                   ? ExternalDatasetReference.fromJson(
@@ -5002,6 +5120,10 @@ class Dataset {
               : null,
           lastModifiedTime: json_.containsKey('lastModifiedTime')
               ? json_['lastModifiedTime'] as core.String
+              : null,
+          linkedDatasetMetadata: json_.containsKey('linkedDatasetMetadata')
+              ? LinkedDatasetMetadata.fromJson(json_['linkedDatasetMetadata']
+                  as core.Map<core.String, core.dynamic>)
               : null,
           linkedDatasetSource: json_.containsKey('linkedDatasetSource')
               ? LinkedDatasetSource.fromJson(json_['linkedDatasetSource']
@@ -5049,6 +5171,8 @@ class Dataset {
           'defaultTableExpirationMs': defaultTableExpirationMs!,
         if (description != null) 'description': description!,
         if (etag != null) 'etag': etag!,
+        if (externalCatalogDatasetOptions != null)
+          'externalCatalogDatasetOptions': externalCatalogDatasetOptions!,
         if (externalDatasetReference != null)
           'externalDatasetReference': externalDatasetReference!,
         if (friendlyName != null) 'friendlyName': friendlyName!,
@@ -5057,6 +5181,8 @@ class Dataset {
         if (kind != null) 'kind': kind!,
         if (labels != null) 'labels': labels!,
         if (lastModifiedTime != null) 'lastModifiedTime': lastModifiedTime!,
+        if (linkedDatasetMetadata != null)
+          'linkedDatasetMetadata': linkedDatasetMetadata!,
         if (linkedDatasetSource != null)
           'linkedDatasetSource': linkedDatasetSource!,
         if (location != null) 'location': location!,
@@ -5359,6 +5485,121 @@ class DestinationTableProperties {
           'expirationTime': expirationTime!.toUtc().toIso8601String(),
         if (friendlyName != null) 'friendlyName': friendlyName!,
         if (labels != null) 'labels': labels!,
+      };
+}
+
+/// Represents privacy policy associated with "differential privacy" method.
+class DifferentialPrivacyPolicy {
+  /// The total delta budget for all queries against the privacy-protected view.
+  ///
+  /// Each subscriber query against this view charges the amount of delta that
+  /// is pre-defined by the contributor through the privacy policy
+  /// delta_per_query field. If there is sufficient budget, then the subscriber
+  /// query attempts to complete. It might still fail due to other reasons, in
+  /// which case the charge is refunded. If there is insufficient budget the
+  /// query is rejected. There might be multiple charge attempts if a single
+  /// query references multiple views. In this case there must be sufficient
+  /// budget for all charges or the query is rejected and charges are refunded
+  /// in best effort. The budget does not have a refresh policy and can only be
+  /// updated via ALTER VIEW or circumvented by creating a new view that can be
+  /// queried with a fresh budget.
+  ///
+  /// Optional.
+  core.double? deltaBudget;
+
+  /// The delta value that is used per query.
+  ///
+  /// Delta represents the probability that any row will fail to be epsilon
+  /// differentially private. Indicates the risk associated with exposing
+  /// aggregate rows in the result of a query.
+  ///
+  /// Optional.
+  core.double? deltaPerQuery;
+
+  /// The total epsilon budget for all queries against the privacy-protected
+  /// view.
+  ///
+  /// Each subscriber query against this view charges the amount of epsilon they
+  /// request in their query. If there is sufficient budget, then the subscriber
+  /// query attempts to complete. It might still fail due to other reasons, in
+  /// which case the charge is refunded. If there is insufficient budget the
+  /// query is rejected. There might be multiple charge attempts if a single
+  /// query references multiple views. In this case there must be sufficient
+  /// budget for all charges or the query is rejected and charges are refunded
+  /// in best effort. The budget does not have a refresh policy and can only be
+  /// updated via ALTER VIEW or circumvented by creating a new view that can be
+  /// queried with a fresh budget.
+  ///
+  /// Optional.
+  core.double? epsilonBudget;
+
+  /// The maximum epsilon value that a query can consume.
+  ///
+  /// If the subscriber specifies epsilon as a parameter in a SELECT query, it
+  /// must be less than or equal to this value. The epsilon parameter controls
+  /// the amount of noise that is added to the groups — a higher epsilon means
+  /// less noise.
+  ///
+  /// Optional.
+  core.double? maxEpsilonPerQuery;
+
+  /// The maximum groups contributed value that is used per query.
+  ///
+  /// Represents the maximum number of groups to which each protected entity can
+  /// contribute. Changing this value does not improve or worsen privacy. The
+  /// best value for accuracy and utility depends on the query and data.
+  ///
+  /// Optional.
+  core.String? maxGroupsContributed;
+
+  /// The privacy unit column associated with this policy.
+  ///
+  /// Differential privacy policies can only have one privacy unit column per
+  /// data source object (table, view).
+  ///
+  /// Optional.
+  core.String? privacyUnitColumn;
+
+  DifferentialPrivacyPolicy({
+    this.deltaBudget,
+    this.deltaPerQuery,
+    this.epsilonBudget,
+    this.maxEpsilonPerQuery,
+    this.maxGroupsContributed,
+    this.privacyUnitColumn,
+  });
+
+  DifferentialPrivacyPolicy.fromJson(core.Map json_)
+      : this(
+          deltaBudget: json_.containsKey('deltaBudget')
+              ? (json_['deltaBudget'] as core.num).toDouble()
+              : null,
+          deltaPerQuery: json_.containsKey('deltaPerQuery')
+              ? (json_['deltaPerQuery'] as core.num).toDouble()
+              : null,
+          epsilonBudget: json_.containsKey('epsilonBudget')
+              ? (json_['epsilonBudget'] as core.num).toDouble()
+              : null,
+          maxEpsilonPerQuery: json_.containsKey('maxEpsilonPerQuery')
+              ? (json_['maxEpsilonPerQuery'] as core.num).toDouble()
+              : null,
+          maxGroupsContributed: json_.containsKey('maxGroupsContributed')
+              ? json_['maxGroupsContributed'] as core.String
+              : null,
+          privacyUnitColumn: json_.containsKey('privacyUnitColumn')
+              ? json_['privacyUnitColumn'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (deltaBudget != null) 'deltaBudget': deltaBudget!,
+        if (deltaPerQuery != null) 'deltaPerQuery': deltaPerQuery!,
+        if (epsilonBudget != null) 'epsilonBudget': epsilonBudget!,
+        if (maxEpsilonPerQuery != null)
+          'maxEpsilonPerQuery': maxEpsilonPerQuery!,
+        if (maxGroupsContributed != null)
+          'maxGroupsContributed': maxGroupsContributed!,
+        if (privacyUnitColumn != null) 'privacyUnitColumn': privacyUnitColumn!,
       };
 }
 
@@ -6101,6 +6342,119 @@ class ExportDataStatistics {
 /// service that evaluates it. See the service documentation for additional
 /// information.
 typedef Expr = $Expr;
+
+/// Options defining open source compatible datasets living in the BigQuery
+/// catalog.
+///
+/// Contains metadata of open source database, schema or namespace represented
+/// by the current dataset.
+class ExternalCatalogDatasetOptions {
+  /// The storage location URI for all tables in the dataset.
+  ///
+  /// Equivalent to hive metastore's database locationUri. Maximum length of
+  /// 1024 characters.
+  ///
+  /// Optional.
+  core.String? defaultStorageLocationUri;
+
+  /// A map of key value pairs defining the parameters and properties of the
+  /// open source schema.
+  ///
+  /// Maximum size of 2Mib.
+  ///
+  /// Optional.
+  core.Map<core.String, core.String>? parameters;
+
+  ExternalCatalogDatasetOptions({
+    this.defaultStorageLocationUri,
+    this.parameters,
+  });
+
+  ExternalCatalogDatasetOptions.fromJson(core.Map json_)
+      : this(
+          defaultStorageLocationUri:
+              json_.containsKey('defaultStorageLocationUri')
+                  ? json_['defaultStorageLocationUri'] as core.String
+                  : null,
+          parameters: json_.containsKey('parameters')
+              ? (json_['parameters'] as core.Map<core.String, core.dynamic>)
+                  .map(
+                  (key, value) => core.MapEntry(
+                    key,
+                    value as core.String,
+                  ),
+                )
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (defaultStorageLocationUri != null)
+          'defaultStorageLocationUri': defaultStorageLocationUri!,
+        if (parameters != null) 'parameters': parameters!,
+      };
+}
+
+/// Metadata about open source compatible table.
+///
+/// The fields contained in these options correspond to hive metastore's table
+/// level properties.
+class ExternalCatalogTableOptions {
+  /// The connection specifying the credentials to be used to read external
+  /// storage, such as Azure Blob, Cloud Storage, or S3.
+  ///
+  /// The connection is needed to read the open source table from BigQuery
+  /// Engine. The connection_id can have the form `..` or
+  /// `projects//locations//connections/`.
+  ///
+  /// Optional.
+  core.String? connectionId;
+
+  /// A map of key value pairs defining the parameters and properties of the
+  /// open source table.
+  ///
+  /// Corresponds with hive meta store table parameters. Maximum size of 4Mib.
+  ///
+  /// Optional.
+  core.Map<core.String, core.String>? parameters;
+
+  /// A storage descriptor containing information about the physical storage of
+  /// this table.
+  ///
+  /// Optional.
+  StorageDescriptor? storageDescriptor;
+
+  ExternalCatalogTableOptions({
+    this.connectionId,
+    this.parameters,
+    this.storageDescriptor,
+  });
+
+  ExternalCatalogTableOptions.fromJson(core.Map json_)
+      : this(
+          connectionId: json_.containsKey('connectionId')
+              ? json_['connectionId'] as core.String
+              : null,
+          parameters: json_.containsKey('parameters')
+              ? (json_['parameters'] as core.Map<core.String, core.dynamic>)
+                  .map(
+                  (key, value) => core.MapEntry(
+                    key,
+                    value as core.String,
+                  ),
+                )
+              : null,
+          storageDescriptor: json_.containsKey('storageDescriptor')
+              ? StorageDescriptor.fromJson(json_['storageDescriptor']
+                  as core.Map<core.String, core.dynamic>)
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (connectionId != null) 'connectionId': connectionId!,
+        if (parameters != null) 'parameters': parameters!,
+        if (storageDescriptor != null) 'storageDescriptor': storageDescriptor!,
+      };
+}
 
 class ExternalDataConfiguration {
   /// Try to detect schema and format options automatically.
@@ -10664,6 +11018,59 @@ class JobStatus {
       };
 }
 
+/// Represents privacy policy associated with "join restrictions".
+///
+/// Join restriction gives data providers the ability to enforce joins on the
+/// 'join_allowed_columns' when data is queried from a privacy protected view.
+class JoinRestrictionPolicy {
+  /// The only columns that joins are allowed on.
+  ///
+  /// This field is must be specified for join_conditions JOIN_ANY and JOIN_ALL
+  /// and it cannot be set for JOIN_BLOCKED.
+  ///
+  /// Optional.
+  core.List<core.String>? joinAllowedColumns;
+
+  /// Specifies if a join is required or not on queries for the view.
+  ///
+  /// Default is JOIN_CONDITION_UNSPECIFIED.
+  ///
+  /// Optional.
+  /// Possible string values are:
+  /// - "JOIN_CONDITION_UNSPECIFIED" : A join is neither required nor restricted
+  /// on any column. Default value.
+  /// - "JOIN_ANY" : A join is required on at least one of the specified
+  /// columns.
+  /// - "JOIN_ALL" : A join is required on all specified columns.
+  /// - "JOIN_NOT_REQUIRED" : A join is not required, but if present it is only
+  /// permitted on 'join_allowed_columns'
+  /// - "JOIN_BLOCKED" : Joins are blocked for all queries.
+  core.String? joinCondition;
+
+  JoinRestrictionPolicy({
+    this.joinAllowedColumns,
+    this.joinCondition,
+  });
+
+  JoinRestrictionPolicy.fromJson(core.Map json_)
+      : this(
+          joinAllowedColumns: json_.containsKey('joinAllowedColumns')
+              ? (json_['joinAllowedColumns'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+          joinCondition: json_.containsKey('joinCondition')
+              ? json_['joinCondition'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (joinAllowedColumns != null)
+          'joinAllowedColumns': joinAllowedColumns!,
+        if (joinCondition != null) 'joinCondition': joinCondition!,
+      };
+}
+
 /// Represents a single JSON object.
 typedef JsonObject = core.Map<core.String, core.Object?>;
 
@@ -10690,6 +11097,36 @@ class JsonOptions {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (encoding != null) 'encoding': encoding!,
+      };
+}
+
+/// Metadata about the Linked Dataset.
+class LinkedDatasetMetadata {
+  /// Specifies whether Linked Dataset is currently in a linked state or not.
+  ///
+  /// Output only.
+  /// Possible string values are:
+  /// - "LINK_STATE_UNSPECIFIED" : The default value. Default to the LINKED
+  /// state.
+  /// - "LINKED" : Normal Linked Dataset state. Data is queryable via the Linked
+  /// Dataset.
+  /// - "UNLINKED" : Data publisher or owner has unlinked this Linked Dataset.
+  /// It means you can no longer query or see the data in the Linked Dataset.
+  core.String? linkState;
+
+  LinkedDatasetMetadata({
+    this.linkState,
+  });
+
+  LinkedDatasetMetadata.fromJson(core.Map json_)
+      : this(
+          linkState: json_.containsKey('linkState')
+              ? json_['linkState'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (linkState != null) 'linkState': linkState!,
       };
 }
 
@@ -11799,6 +12236,84 @@ class ParquetOptions {
       };
 }
 
+/// Partition skew detailed information.
+class PartitionSkew {
+  /// Source stages which produce skewed data.
+  ///
+  /// Output only.
+  core.List<SkewSource>? skewSources;
+
+  PartitionSkew({
+    this.skewSources,
+  });
+
+  PartitionSkew.fromJson(core.Map json_)
+      : this(
+          skewSources: json_.containsKey('skewSources')
+              ? (json_['skewSources'] as core.List)
+                  .map((value) => SkewSource.fromJson(
+                      value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (skewSources != null) 'skewSources': skewSources!,
+      };
+}
+
+/// The partitioning column information.
+class PartitionedColumn {
+  /// The name of the partition column.
+  ///
+  /// Output only.
+  core.String? field;
+
+  PartitionedColumn({
+    this.field,
+  });
+
+  PartitionedColumn.fromJson(core.Map json_)
+      : this(
+          field:
+              json_.containsKey('field') ? json_['field'] as core.String : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (field != null) 'field': field!,
+      };
+}
+
+/// The partitioning information, which includes managed table and external
+/// table partition information.
+class PartitioningDefinition {
+  /// Details about each partitioning column.
+  ///
+  /// BigQuery native tables only support 1 partitioning column. Other table
+  /// types may support 0, 1 or more partitioning columns.
+  ///
+  /// Output only.
+  core.List<PartitionedColumn>? partitionedColumn;
+
+  PartitioningDefinition({
+    this.partitionedColumn,
+  });
+
+  PartitioningDefinition.fromJson(core.Map json_)
+      : this(
+          partitionedColumn: json_.containsKey('partitionedColumn')
+              ? (json_['partitionedColumn'] as core.List)
+                  .map((value) => PartitionedColumn.fromJson(
+                      value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (partitionedColumn != null) 'partitionedColumn': partitionedColumn!,
+      };
+}
+
 /// Performance insights for the job.
 class PerformanceInsights {
   /// Average execution ms of previous runs.
@@ -12047,8 +12562,24 @@ class PrivacyPolicy {
   /// Optional.
   AggregationThresholdPolicy? aggregationThresholdPolicy;
 
+  /// Policy used for differential privacy.
+  ///
+  /// Optional.
+  DifferentialPrivacyPolicy? differentialPrivacyPolicy;
+
+  /// Join restriction policy is outside of the one of policies, since this
+  /// policy can be set along with other policies.
+  ///
+  /// This policy gives data providers the ability to enforce joins on the
+  /// 'join_allowed_columns' when data is queried from a privacy protected view.
+  ///
+  /// Optional.
+  JoinRestrictionPolicy? joinRestrictionPolicy;
+
   PrivacyPolicy({
     this.aggregationThresholdPolicy,
+    this.differentialPrivacyPolicy,
+    this.joinRestrictionPolicy,
   });
 
   PrivacyPolicy.fromJson(core.Map json_)
@@ -12059,11 +12590,25 @@ class PrivacyPolicy {
                       json_['aggregationThresholdPolicy']
                           as core.Map<core.String, core.dynamic>)
                   : null,
+          differentialPrivacyPolicy:
+              json_.containsKey('differentialPrivacyPolicy')
+                  ? DifferentialPrivacyPolicy.fromJson(
+                      json_['differentialPrivacyPolicy']
+                          as core.Map<core.String, core.dynamic>)
+                  : null,
+          joinRestrictionPolicy: json_.containsKey('joinRestrictionPolicy')
+              ? JoinRestrictionPolicy.fromJson(json_['joinRestrictionPolicy']
+                  as core.Map<core.String, core.dynamic>)
+              : null,
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (aggregationThresholdPolicy != null)
           'aggregationThresholdPolicy': aggregationThresholdPolicy!,
+        if (differentialPrivacyPolicy != null)
+          'differentialPrivacyPolicy': differentialPrivacyPolicy!,
+        if (joinRestrictionPolicy != null)
+          'joinRestrictionPolicy': joinRestrictionPolicy!,
       };
 }
 
@@ -14123,6 +14668,63 @@ class SearchStatistics {
       };
 }
 
+/// Serializer and deserializer information.
+class SerDeInfo {
+  /// Name of the SerDe.
+  ///
+  /// The maximum length is 256 characters.
+  ///
+  /// Optional.
+  core.String? name;
+
+  /// Key-value pairs that define the initialization parameters for the
+  /// serialization library.
+  ///
+  /// Maximum size 10 Kib.
+  ///
+  /// Optional.
+  core.Map<core.String, core.String>? parameters;
+
+  /// Specifies a fully-qualified class name of the serialization library that
+  /// is responsible for the translation of data between table representation
+  /// and the underlying low-level input and output format structures.
+  ///
+  /// The maximum length is 256 characters.
+  ///
+  /// Required.
+  core.String? serializationLibrary;
+
+  SerDeInfo({
+    this.name,
+    this.parameters,
+    this.serializationLibrary,
+  });
+
+  SerDeInfo.fromJson(core.Map json_)
+      : this(
+          name: json_.containsKey('name') ? json_['name'] as core.String : null,
+          parameters: json_.containsKey('parameters')
+              ? (json_['parameters'] as core.Map<core.String, core.dynamic>)
+                  .map(
+                  (key, value) => core.MapEntry(
+                    key,
+                    value as core.String,
+                  ),
+                )
+              : null,
+          serializationLibrary: json_.containsKey('serializationLibrary')
+              ? json_['serializationLibrary'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (name != null) 'name': name!,
+        if (parameters != null) 'parameters': parameters!,
+        if (serializationLibrary != null)
+          'serializationLibrary': serializationLibrary!,
+      };
+}
+
 /// \[Preview\] Information related to sessions.
 class SessionInfo {
   /// The id of the session.
@@ -14180,6 +14782,29 @@ class SetIamPolicyRequest {
   core.Map<core.String, core.dynamic> toJson() => {
         if (policy != null) 'policy': policy!,
         if (updateMask != null) 'updateMask': updateMask!,
+      };
+}
+
+/// Details about source stages which produce skewed data.
+class SkewSource {
+  /// Stage id of the skew source stage.
+  ///
+  /// Output only.
+  core.String? stageId;
+
+  SkewSource({
+    this.stageId,
+  });
+
+  SkewSource.fromJson(core.Map json_)
+      : this(
+          stageId: json_.containsKey('stageId')
+              ? json_['stageId'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (stageId != null) 'stageId': stageId!,
       };
 }
 
@@ -14403,14 +15028,15 @@ class SparkStatistics {
   /// Output only.
   core.Map<core.String, core.String>? endpoints;
 
-  /// The Google Cloud Storage bucket that is used as the default filesystem by
+  /// The Google Cloud Storage bucket that is used as the default file system by
   /// the Spark application.
   ///
-  /// This fields is only filled when the Spark procedure uses the INVOKER
-  /// security mode. It is inferred from the system variable
-  /// @@spark_proc_properties.staging_bucket if it is provided. Otherwise,
-  /// BigQuery creates a default staging bucket for the job and returns the
-  /// bucket name in this field. Example: * `gs://[bucket_name]`
+  /// This field is only filled when the Spark procedure uses the invoker
+  /// security mode. The `gcsStagingBucket` bucket is inferred from the
+  /// `@@spark_proc_properties.staging_bucket` system variable (if it is
+  /// provided). Otherwise, BigQuery creates a default staging bucket for the
+  /// job and returns the bucket name in this field. Example: *
+  /// `gs://[bucket_name]`
   ///
   /// Output only.
   core.String? gcsStagingBucket;
@@ -14418,14 +15044,13 @@ class SparkStatistics {
   /// The Cloud KMS encryption key that is used to protect the resources created
   /// by the Spark job.
   ///
-  /// If the Spark procedure uses DEFINER security mode, the Cloud KMS key is
-  /// inferred from the Spark connection associated with the procedure if it is
-  /// provided. Otherwise the key is inferred from the default key of the Spark
-  /// connection's project if the CMEK organization policy is enforced. If the
-  /// Spark procedure uses INVOKER security mode, the Cloud KMS encryption key
-  /// is inferred from the system variable @@spark_proc_properties.kms_key_name
-  /// if it is provided. Otherwise, the key is inferred fromt he default key of
-  /// the BigQuery job's project if the CMEK organization policy is enforced.
+  /// If the Spark procedure uses the invoker security mode, the Cloud KMS
+  /// encryption key is either inferred from the provided system variable,
+  /// `@@spark_proc_properties.kms_key_name`, or the default key of the BigQuery
+  /// job's project (if the CMEK organization policy is enforced). Otherwise,
+  /// the Cloud KMS key is either inferred from the Spark connection associated
+  /// with the procedure (if it is provided), or from the default key of the
+  /// Spark connection's project if the CMEK organization policy is enforced.
   /// Example: *
   /// `projects/[kms_project_id]/locations/[region]/keyRings/[key_region]/cryptoKeys/[key]`
   ///
@@ -14550,6 +15175,11 @@ class StagePerformanceStandaloneInsight {
   /// Output only.
   core.bool? insufficientShuffleQuota;
 
+  /// Partition skew in the stage.
+  ///
+  /// Output only.
+  PartitionSkew? partitionSkew;
+
   /// True if the stage has a slot contention issue.
   ///
   /// Output only.
@@ -14564,6 +15194,7 @@ class StagePerformanceStandaloneInsight {
     this.biEngineReasons,
     this.highCardinalityJoins,
     this.insufficientShuffleQuota,
+    this.partitionSkew,
     this.slotContention,
     this.stageId,
   });
@@ -14586,6 +15217,10 @@ class StagePerformanceStandaloneInsight {
               json_.containsKey('insufficientShuffleQuota')
                   ? json_['insufficientShuffleQuota'] as core.bool
                   : null,
+          partitionSkew: json_.containsKey('partitionSkew')
+              ? PartitionSkew.fromJson(
+                  json_['partitionSkew'] as core.Map<core.String, core.dynamic>)
+              : null,
           slotContention: json_.containsKey('slotContention')
               ? json_['slotContention'] as core.bool
               : null,
@@ -14600,6 +15235,7 @@ class StagePerformanceStandaloneInsight {
           'highCardinalityJoins': highCardinalityJoins!,
         if (insufficientShuffleQuota != null)
           'insufficientShuffleQuota': insufficientShuffleQuota!,
+        if (partitionSkew != null) 'partitionSkew': partitionSkew!,
         if (slotContention != null) 'slotContention': slotContention!,
         if (stageId != null) 'stageId': stageId!,
       };
@@ -14770,6 +15406,71 @@ class StandardSqlTableType {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (columns != null) 'columns': columns!,
+      };
+}
+
+/// Contains information about how a table's data is stored and accessed by open
+/// source query engines.
+class StorageDescriptor {
+  /// Specifies the fully qualified class name of the InputFormat (e.g.
+  /// "org.apache.hadoop.hive.ql.io.orc.OrcInputFormat").
+  ///
+  /// The maximum length is 128 characters.
+  ///
+  /// Optional.
+  core.String? inputFormat;
+
+  /// The physical location of the table (e.g.
+  /// 'gs://spark-dataproc-data/pangea-data/case_sensitive/' or
+  /// 'gs://spark-dataproc-data/pangea-data / * ').
+  ///
+  /// The maximum length is 2056 bytes.
+  ///
+  /// Optional.
+  core.String? locationUri;
+
+  /// Specifies the fully qualified class name of the OutputFormat (e.g.
+  /// "org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat").
+  ///
+  /// The maximum length is 128 characters.
+  ///
+  /// Optional.
+  core.String? outputFormat;
+
+  /// Serializer and deserializer information.
+  ///
+  /// Optional.
+  SerDeInfo? serdeInfo;
+
+  StorageDescriptor({
+    this.inputFormat,
+    this.locationUri,
+    this.outputFormat,
+    this.serdeInfo,
+  });
+
+  StorageDescriptor.fromJson(core.Map json_)
+      : this(
+          inputFormat: json_.containsKey('inputFormat')
+              ? json_['inputFormat'] as core.String
+              : null,
+          locationUri: json_.containsKey('locationUri')
+              ? json_['locationUri'] as core.String
+              : null,
+          outputFormat: json_.containsKey('outputFormat')
+              ? json_['outputFormat'] as core.String
+              : null,
+          serdeInfo: json_.containsKey('serdeInfo')
+              ? SerDeInfo.fromJson(
+                  json_['serdeInfo'] as core.Map<core.String, core.dynamic>)
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (inputFormat != null) 'inputFormat': inputFormat!,
+        if (locationUri != null) 'locationUri': locationUri!,
+        if (outputFormat != null) 'outputFormat': outputFormat!,
+        if (serdeInfo != null) 'serdeInfo': serdeInfo!,
       };
 }
 
@@ -14965,6 +15666,11 @@ class Table {
   /// Optional.
   core.String? expirationTime;
 
+  /// Options defining open source compatible table.
+  ///
+  /// Optional.
+  ExternalCatalogTableOptions? externalCatalogTableOptions;
+
   /// Describes the data format, location, and other properties of a table
   /// stored outside of BigQuery.
   ///
@@ -15111,6 +15817,13 @@ class Table {
   /// Output only.
   core.String? numTotalPhysicalBytes;
 
+  /// The partition information for all table formats, including managed
+  /// partitioned tables, hive partitioned tables, and iceberg partitioned
+  /// tables.
+  ///
+  /// Output only.
+  PartitioningDefinition? partitionDefinition;
+
   /// If specified, configures range partitioning for this table.
   RangePartitioning? rangePartitioning;
 
@@ -15212,6 +15925,7 @@ class Table {
     this.encryptionConfiguration,
     this.etag,
     this.expirationTime,
+    this.externalCatalogTableOptions,
     this.externalDataConfiguration,
     this.friendlyName,
     this.id,
@@ -15235,6 +15949,7 @@ class Table {
     this.numTimeTravelPhysicalBytes,
     this.numTotalLogicalBytes,
     this.numTotalPhysicalBytes,
+    this.partitionDefinition,
     this.rangePartitioning,
     this.replicas,
     this.requirePartitionFilter,
@@ -15286,6 +16001,12 @@ class Table {
           expirationTime: json_.containsKey('expirationTime')
               ? json_['expirationTime'] as core.String
               : null,
+          externalCatalogTableOptions:
+              json_.containsKey('externalCatalogTableOptions')
+                  ? ExternalCatalogTableOptions.fromJson(
+                      json_['externalCatalogTableOptions']
+                          as core.Map<core.String, core.dynamic>)
+                  : null,
           externalDataConfiguration:
               json_.containsKey('externalDataConfiguration')
                   ? ExternalDataConfiguration.fromJson(
@@ -15364,6 +16085,10 @@ class Table {
           numTotalPhysicalBytes: json_.containsKey('numTotalPhysicalBytes')
               ? json_['numTotalPhysicalBytes'] as core.String
               : null,
+          partitionDefinition: json_.containsKey('partitionDefinition')
+              ? PartitioningDefinition.fromJson(json_['partitionDefinition']
+                  as core.Map<core.String, core.dynamic>)
+              : null,
           rangePartitioning: json_.containsKey('rangePartitioning')
               ? RangePartitioning.fromJson(json_['rangePartitioning']
                   as core.Map<core.String, core.dynamic>)
@@ -15438,6 +16163,8 @@ class Table {
           'encryptionConfiguration': encryptionConfiguration!,
         if (etag != null) 'etag': etag!,
         if (expirationTime != null) 'expirationTime': expirationTime!,
+        if (externalCatalogTableOptions != null)
+          'externalCatalogTableOptions': externalCatalogTableOptions!,
         if (externalDataConfiguration != null)
           'externalDataConfiguration': externalDataConfiguration!,
         if (friendlyName != null) 'friendlyName': friendlyName!,
@@ -15470,6 +16197,8 @@ class Table {
           'numTotalLogicalBytes': numTotalLogicalBytes!,
         if (numTotalPhysicalBytes != null)
           'numTotalPhysicalBytes': numTotalPhysicalBytes!,
+        if (partitionDefinition != null)
+          'partitionDefinition': partitionDefinition!,
         if (rangePartitioning != null) 'rangePartitioning': rangePartitioning!,
         if (replicas != null) 'replicas': replicas!,
         if (requirePartitionFilter != null)
@@ -15977,7 +16706,7 @@ class TableFieldSchemaPolicyTags {
 class TableFieldSchemaRangeElementType {
   /// The type of a field element.
   ///
-  /// See TableFieldSchema.type.
+  /// For more information, see TableFieldSchema.type.
   ///
   /// Required.
   core.String? type;
@@ -16115,8 +16844,9 @@ class TableFieldSchema {
   ///
   /// Possible values include: * STRING * BYTES * INTEGER (or INT64) * FLOAT (or
   /// FLOAT64) * BOOLEAN (or BOOL) * TIMESTAMP * DATE * TIME * DATETIME *
-  /// GEOGRAPHY * NUMERIC * BIGNUMERIC * JSON * RECORD (or STRUCT) Use of
-  /// RECORD/STRUCT indicates that the field contains a nested schema.
+  /// GEOGRAPHY * NUMERIC * BIGNUMERIC * JSON * RECORD (or STRUCT) * RANGE
+  /// (\[Preview\](/products/#product-launch-stages)) Use of RECORD/STRUCT
+  /// indicates that the field contains a nested schema.
   ///
   /// Required.
   core.String? type;
@@ -17927,7 +18657,7 @@ class TransformColumn {
 class UndeleteDatasetRequest {
   /// The exact time when the dataset was deleted.
   ///
-  /// If not specified, it will undelete the most recently deleted version.
+  /// If not specified, the most recently deleted version is undeleted.
   ///
   /// Optional.
   core.String? deletionTime;

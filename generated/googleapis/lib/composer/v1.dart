@@ -1422,6 +1422,44 @@ class ProjectsLocationsOperationsResource {
   }
 }
 
+/// The policy for airflow metadata database retention.
+class AirflowMetadataRetentionPolicyConfig {
+  /// How many days data should be retained for.
+  ///
+  /// Optional.
+  core.int? retentionDays;
+
+  /// Retention can be either enabled or disabled.
+  ///
+  /// Optional.
+  /// Possible string values are:
+  /// - "RETENTION_MODE_UNSPECIFIED" : Default mode doesn't change environment
+  /// parameters.
+  /// - "RETENTION_MODE_ENABLED" : Retention policy is enabled.
+  /// - "RETENTION_MODE_DISABLED" : Retention policy is disabled.
+  core.String? retentionMode;
+
+  AirflowMetadataRetentionPolicyConfig({
+    this.retentionDays,
+    this.retentionMode,
+  });
+
+  AirflowMetadataRetentionPolicyConfig.fromJson(core.Map json_)
+      : this(
+          retentionDays: json_.containsKey('retentionDays')
+              ? json_['retentionDays'] as core.int
+              : null,
+          retentionMode: json_.containsKey('retentionMode')
+              ? json_['retentionMode'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (retentionDays != null) 'retentionDays': retentionDays!,
+        if (retentionMode != null) 'retentionMode': retentionMode!,
+      };
+}
+
 /// Allowed IP range with user-provided description.
 class AllowedIpRange {
   /// User-provided description.
@@ -1614,6 +1652,9 @@ class ComposerWorkloadStatus {
 }
 
 /// Configuration for resources used by Airflow DAG processors.
+///
+/// This field is supported for Cloud Composer environments in versions
+/// composer-3.*.*-airflow-*.*.* and newer.
 class DagProcessorResource {
   /// The number of DAG processors.
   ///
@@ -1669,17 +1710,29 @@ class DagProcessorResource {
 
 /// The configuration setting for Airflow database data retention mechanism.
 class DataRetentionConfig {
+  /// The retention policy for airflow metadata database.
+  ///
+  /// Optional.
+  AirflowMetadataRetentionPolicyConfig? airflowMetadataRetentionConfig;
+
   /// The configuration settings for task logs retention
   ///
   /// Optional.
   TaskLogsRetentionConfig? taskLogsRetentionConfig;
 
   DataRetentionConfig({
+    this.airflowMetadataRetentionConfig,
     this.taskLogsRetentionConfig,
   });
 
   DataRetentionConfig.fromJson(core.Map json_)
       : this(
+          airflowMetadataRetentionConfig:
+              json_.containsKey('airflowMetadataRetentionConfig')
+                  ? AirflowMetadataRetentionPolicyConfig.fromJson(
+                      json_['airflowMetadataRetentionConfig']
+                          as core.Map<core.String, core.dynamic>)
+                  : null,
           taskLogsRetentionConfig: json_.containsKey('taskLogsRetentionConfig')
               ? TaskLogsRetentionConfig.fromJson(
                   json_['taskLogsRetentionConfig']
@@ -1688,6 +1741,8 @@ class DataRetentionConfig {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
+        if (airflowMetadataRetentionConfig != null)
+          'airflowMetadataRetentionConfig': airflowMetadataRetentionConfig!,
         if (taskLogsRetentionConfig != null)
           'taskLogsRetentionConfig': taskLogsRetentionConfig!,
       };
@@ -1981,8 +2036,9 @@ class EnvironmentConfig {
   /// scheduled during the window. The maintenance window period must encompass
   /// at least 12 hours per week. This may be split into multiple chunks, each
   /// with a size of at least 4 hours. If this value is omitted, the default
-  /// value for maintenance window will be applied. The default value is
-  /// Saturday and Sunday 00-06 GMT.
+  /// value for maintenance window is applied. By default, maintenance windows
+  /// are from 00:00:00 to 04:00:00 (GMT) on Friday, Saturday, and Sunday every
+  /// week.
   ///
   /// Optional.
   MaintenanceWindow? maintenanceWindow;
@@ -4014,9 +4070,6 @@ class StorageConfig {
 /// The configuration setting for Task Logs.
 class TaskLogsRetentionConfig {
   /// The mode of storage for Airflow workers task logs.
-  ///
-  /// For details, see
-  /// go/composer-store-task-logs-in-cloud-logging-only-design-doc
   ///
   /// Optional.
   /// Possible string values are:

@@ -431,6 +431,13 @@ class ProjectsLocationsFunctionsResource {
   /// Value must have pattern
   /// `^projects/\[^/\]+/locations/\[^/\]+/functions/\[^/\]+$`.
   ///
+  /// [revision] - Optional. The optional version of the 1st gen function whose
+  /// details should be obtained. The version of a 1st gen function is an
+  /// integer that starts from 1 and gets incremented on redeployments. GCF may
+  /// keep historical configs for old versions of 1st gen function. This field
+  /// can be specified to fetch the historical configs. This field is valid only
+  /// for GCF 1st gen function.
+  ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
   ///
@@ -443,9 +450,11 @@ class ProjectsLocationsFunctionsResource {
   /// this method will complete with the same error.
   async.Future<Function_> get(
     core.String name, {
+    core.String? revision,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (revision != null) 'revision': [revision],
       if ($fields != null) 'fields': [$fields],
     };
 
@@ -1203,10 +1212,9 @@ class BuildConfig {
   /// Docker Registry to use for this deployment.
   ///
   /// This configuration is only applicable to 1st Gen functions, 2nd Gen
-  /// functions can only use Artifact Registry. If `docker_repository` field is
-  /// specified, this field will be automatically set as `ARTIFACT_REGISTRY`. If
-  /// unspecified, it currently defaults to `CONTAINER_REGISTRY`. This field may
-  /// be overridden by the backend for eligible deployments.
+  /// functions can only use Artifact Registry. If unspecified, it defaults to
+  /// `ARTIFACT_REGISTRY`. If `docker_repository` field is specified, this field
+  /// should either be left unspecified or set to `ARTIFACT_REGISTRY`.
   /// Possible string values are:
   /// - "DOCKER_REGISTRY_UNSPECIFIED" : Unspecified.
   /// - "CONTAINER_REGISTRY" : Docker images will be stored in multi-regional

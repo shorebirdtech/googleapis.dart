@@ -238,52 +238,6 @@ class ProjectsNamespacesResource {
     return FetchRemoteConfigResponse.fromJson(
         response_ as core.Map<core.String, core.dynamic>);
   }
-
-  /// Get a project's server-side Remote Config template.
-  ///
-  /// Note that this request proto is structured differently from other request
-  /// messages in this proto, however this is consistent and compliant with the
-  /// new API guidance
-  /// (https://google.aip.dev/122#fields-representing-resource-names) and the
-  /// standard going forward.
-  ///
-  /// Request parameters:
-  ///
-  /// [name] - Required. The name of the template to get. Format:
-  /// projects/{project}/namespaces/{namespace}/serverRemoteConfig Project is a
-  /// Firebase project ID or project number. Namespace is the namespace ID
-  /// (e.g.: firebase-server)
-  /// Value must have pattern
-  /// `^projects/\[^/\]+/namespaces/\[^/\]+/serverRemoteConfig$`.
-  ///
-  /// [$fields] - Selector specifying which fields to include in a partial
-  /// response.
-  ///
-  /// Completes with a [ServerRemoteConfig].
-  ///
-  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
-  /// error.
-  ///
-  /// If the used [http.Client] completes with an error when making a REST call,
-  /// this method will complete with the same error.
-  async.Future<ServerRemoteConfig> getServerRemoteConfig(
-    core.String name, {
-    core.String? $fields,
-  }) async {
-    final queryParams_ = <core.String, core.List<core.String>>{
-      if ($fields != null) 'fields': [$fields],
-    };
-
-    final url_ = 'v1/' + core.Uri.encodeFull('$name');
-
-    final response_ = await _requester.request(
-      url_,
-      'GET',
-      queryParams: queryParams_,
-    );
-    return ServerRemoteConfig.fromJson(
-        response_ as core.Map<core.String, core.dynamic>);
-  }
 }
 
 class ProjectsRemoteConfigResource {
@@ -731,6 +685,10 @@ class FetchRemoteConfigResponse {
   /// fetch call.
   core.Map<core.String, PersonalizationMetadata>? personalizationMetadata;
 
+  /// Metadata describing active Remote Config rollouts which are related to
+  /// parameters delivered via this fetch response.
+  core.List<RolloutMetadata>? rolloutMetadata;
+
   /// The state of the fetched response.
   /// Possible string values are:
   /// - "INSTANCE_STATE_UNSPECIFIED" : Default (when the enum is not set by the
@@ -752,6 +710,7 @@ class FetchRemoteConfigResponse {
     this.entries,
     this.experimentDescriptions,
     this.personalizationMetadata,
+    this.rolloutMetadata,
     this.state,
     this.templateVersion,
   });
@@ -786,6 +745,12 @@ class FetchRemoteConfigResponse {
                   ),
                 )
               : null,
+          rolloutMetadata: json_.containsKey('rolloutMetadata')
+              ? (json_['rolloutMetadata'] as core.List)
+                  .map((value) => RolloutMetadata.fromJson(
+                      value as core.Map<core.String, core.dynamic>))
+                  .toList()
+              : null,
           state:
               json_.containsKey('state') ? json_['state'] as core.String : null,
           templateVersion: json_.containsKey('templateVersion')
@@ -800,6 +765,7 @@ class FetchRemoteConfigResponse {
           'experimentDescriptions': experimentDescriptions!,
         if (personalizationMetadata != null)
           'personalizationMetadata': personalizationMetadata!,
+        if (rolloutMetadata != null) 'rolloutMetadata': rolloutMetadata!,
         if (state != null) 'state': state!,
         if (templateVersion != null) 'templateVersion': templateVersion!,
       };
@@ -1322,206 +1288,47 @@ class RollbackRemoteConfigRequest {
       };
 }
 
-/// A ServerRemoteConfig represents the raw data-plane version of a control
-/// plane Remote Config template.
-///
-/// This raw template will be evaluated by the Admin SDK (RC Server SDK) to form
-/// the config.
-class ServerRemoteConfig {
-  /// A list of conditions in descending order by priority.
-  core.List<ServerRemoteConfigCondition>? conditions;
+/// Metadata describing Remote Config rollouts.
+class RolloutMetadata {
+  /// The parameter keys affected by this rollout.
+  core.List<core.String>? affectedParameterKeys;
 
-  /// Map of parameter keys to their optional default values and optional
-  /// conditional values.
-  core.Map<core.String, ServerRemoteConfigParameter>? parameters;
-
-  /// Contains all metadata about a particular version of the server Remote
-  /// Config template.
+  /// The Firebase Remote Config rollout ID uniquely identifying a rollout.
   ///
-  /// Note that we are reusing the control plane version proto here.
-  Version? version;
+  /// This is the tracking ID of the Rollout object defined in
+  /// ExperimentsEntities.
+  core.String? rolloutId;
 
-  ServerRemoteConfig({
-    this.conditions,
-    this.parameters,
-    this.version,
+  /// The variant of the rollout assigned to this instance in this fetch
+  /// response.
+  core.String? variantId;
+
+  RolloutMetadata({
+    this.affectedParameterKeys,
+    this.rolloutId,
+    this.variantId,
   });
 
-  ServerRemoteConfig.fromJson(core.Map json_)
+  RolloutMetadata.fromJson(core.Map json_)
       : this(
-          conditions: json_.containsKey('conditions')
-              ? (json_['conditions'] as core.List)
-                  .map((value) => ServerRemoteConfigCondition.fromJson(
-                      value as core.Map<core.String, core.dynamic>))
+          affectedParameterKeys: json_.containsKey('affectedParameterKeys')
+              ? (json_['affectedParameterKeys'] as core.List)
+                  .map((value) => value as core.String)
                   .toList()
               : null,
-          parameters: json_.containsKey('parameters')
-              ? (json_['parameters'] as core.Map<core.String, core.dynamic>)
-                  .map(
-                  (key, value) => core.MapEntry(
-                    key,
-                    ServerRemoteConfigParameter.fromJson(
-                        value as core.Map<core.String, core.dynamic>),
-                  ),
-                )
+          rolloutId: json_.containsKey('rolloutId')
+              ? json_['rolloutId'] as core.String
               : null,
-          version: json_.containsKey('version')
-              ? Version.fromJson(
-                  json_['version'] as core.Map<core.String, core.dynamic>)
+          variantId: json_.containsKey('variantId')
+              ? json_['variantId'] as core.String
               : null,
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
-        if (conditions != null) 'conditions': conditions!,
-        if (parameters != null) 'parameters': parameters!,
-        if (version != null) 'version': version!,
-      };
-}
-
-/// A condition targeting a specific group of users and servers.
-///
-/// Same as the condition in the control plane.
-class ServerRemoteConfigCondition {
-  /// The logic of this condition.
-  ///
-  /// See the documentation regarding \[Condition
-  /// Expressions\](/docs/remote-config/condition-reference) for the expected
-  /// syntax of this field.
-  ///
-  /// Required.
-  core.String? expression;
-
-  /// A non-empty and unique name of this condition.
-  ///
-  /// Required.
-  core.String? name;
-
-  ServerRemoteConfigCondition({
-    this.expression,
-    this.name,
-  });
-
-  ServerRemoteConfigCondition.fromJson(core.Map json_)
-      : this(
-          expression: json_.containsKey('expression')
-              ? json_['expression'] as core.String
-              : null,
-          name: json_.containsKey('name') ? json_['name'] as core.String : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (expression != null) 'expression': expression!,
-        if (name != null) 'name': name!,
-      };
-}
-
-/// A parameter value associated with a parameter key in
-/// \[google.firebase.remoteconfig.v1.ServerRemoteConfig.parameters\].
-///
-/// At minimum, a `default_value` or a `conditional_values` entry should be
-/// present for the parameter to have any effect.
-class ServerRemoteConfigParameter {
-  /// Optional - a (condition name, value) map.
-  ///
-  /// The condition_name of the highest priority (the one listed first in the
-  /// RemoteConfig's conditions list) determines the value of this parameter.
-  core.Map<core.String, ServerRemoteConfigParameterValue>? conditionalValues;
-
-  /// Optional - value to set the parameter to, when none of the named
-  /// conditions evaluate to true.
-  ServerRemoteConfigParameterValue? defaultValue;
-
-  /// A description for this Parameter.
-  ///
-  /// Its length must be less than or equal to 256 characters. A description may
-  /// contain any Unicode characters.
-  ///
-  /// Optional.
-  core.String? description;
-
-  /// The data type for all values of this parameter in the current version of
-  /// the template.
-  ///
-  /// Defaults to `ParameterValueType.STRING` if unspecified.
-  /// Possible string values are:
-  /// - "PARAMETER_VALUE_TYPE_UNSPECIFIED" : Catch-all for unrecognized enum
-  /// values.
-  /// - "STRING" : Represents String values.
-  /// - "BOOLEAN" : Represents Boolean values ("true" or "false").
-  /// - "NUMBER" : Represents both positive and negative integer and float
-  /// values.
-  /// - "JSON" : Represents JSON values.
-  core.String? valueType;
-
-  ServerRemoteConfigParameter({
-    this.conditionalValues,
-    this.defaultValue,
-    this.description,
-    this.valueType,
-  });
-
-  ServerRemoteConfigParameter.fromJson(core.Map json_)
-      : this(
-          conditionalValues: json_.containsKey('conditionalValues')
-              ? (json_['conditionalValues']
-                      as core.Map<core.String, core.dynamic>)
-                  .map(
-                  (key, value) => core.MapEntry(
-                    key,
-                    ServerRemoteConfigParameterValue.fromJson(
-                        value as core.Map<core.String, core.dynamic>),
-                  ),
-                )
-              : null,
-          defaultValue: json_.containsKey('defaultValue')
-              ? ServerRemoteConfigParameterValue.fromJson(
-                  json_['defaultValue'] as core.Map<core.String, core.dynamic>)
-              : null,
-          description: json_.containsKey('description')
-              ? json_['description'] as core.String
-              : null,
-          valueType: json_.containsKey('valueType')
-              ? json_['valueType'] as core.String
-              : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (conditionalValues != null) 'conditionalValues': conditionalValues!,
-        if (defaultValue != null) 'defaultValue': defaultValue!,
-        if (description != null) 'description': description!,
-        if (valueType != null) 'valueType': valueType!,
-      };
-}
-
-/// A ServerRemoteConfigParameterValue resource contains the value that a
-/// parameter may have.
-///
-/// Currently, there is no support for managed values like ABT or P13n.
-class ServerRemoteConfigParameterValue {
-  /// If true, the parameter is omitted from the parameter values returned to
-  /// the server.
-  core.bool? useInAppDefault;
-
-  /// The string value that the parameter is set to.
-  core.String? value;
-
-  ServerRemoteConfigParameterValue({
-    this.useInAppDefault,
-    this.value,
-  });
-
-  ServerRemoteConfigParameterValue.fromJson(core.Map json_)
-      : this(
-          useInAppDefault: json_.containsKey('useInAppDefault')
-              ? json_['useInAppDefault'] as core.bool
-              : null,
-          value:
-              json_.containsKey('value') ? json_['value'] as core.String : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (useInAppDefault != null) 'useInAppDefault': useInAppDefault!,
-        if (value != null) 'value': value!,
+        if (affectedParameterKeys != null)
+          'affectedParameterKeys': affectedParameterKeys!,
+        if (rolloutId != null) 'rolloutId': rolloutId!,
+        if (variantId != null) 'variantId': variantId!,
       };
 }
 

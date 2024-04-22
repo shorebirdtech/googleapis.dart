@@ -623,7 +623,8 @@ class BillingAccountsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -673,7 +674,8 @@ class BillingAccountsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -2197,6 +2199,14 @@ class BillingAccountsSinksResource {
   /// "billingAccounts/\[BILLING_ACCOUNT_ID\]" "folders/\[FOLDER_ID\]"
   /// Value must have pattern `^billingAccounts/\[^/\]+$`.
   ///
+  /// [filter] - Optional. A filter expression to constrain the sinks returned.
+  /// Today, this only supports the following strings: '' 'in_scope("ALL")',
+  /// 'in_scope("ANCESTOR")', 'in_scope("DEFAULT")'.Description of scopes below.
+  /// ALL: Includes all of the sinks which can be returned in any other scope.
+  /// ANCESTOR: Includes intercepting sinks owned by ancestor resources.
+  /// DEFAULT: Includes sinks owned by parent.When the empty string is provided,
+  /// then the filter 'in_scope("DEFAULT")' is applied.
+  ///
   /// [pageSize] - Optional. The maximum number of results to return from this
   /// request. Non-positive values are ignored. The presence of nextPageToken in
   /// the response indicates that more results might be available.
@@ -2218,11 +2228,13 @@ class BillingAccountsSinksResource {
   /// this method will complete with the same error.
   async.Future<ListSinksResponse> list(
     core.String parent, {
+    core.String? filter,
     core.int? pageSize,
     core.String? pageToken,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
       if (pageSize != null) 'pageSize': ['${pageSize}'],
       if (pageToken != null) 'pageToken': [pageToken],
       if ($fields != null) 'fields': [$fields],
@@ -2492,45 +2504,6 @@ class EntriesResource {
       queryParams: queryParams_,
     );
     return ListLogEntriesResponse.fromJson(
-        response_ as core.Map<core.String, core.dynamic>);
-  }
-
-  /// Streaming read of log entries as they are received.
-  ///
-  /// Until the stream is terminated, it will continue reading logs.
-  ///
-  /// [request] - The metadata request object.
-  ///
-  /// Request parameters:
-  ///
-  /// [$fields] - Selector specifying which fields to include in a partial
-  /// response.
-  ///
-  /// Completes with a [TailLogEntriesResponse].
-  ///
-  /// Completes with a [commons.ApiRequestError] if the API endpoint returned an
-  /// error.
-  ///
-  /// If the used [http.Client] completes with an error when making a REST call,
-  /// this method will complete with the same error.
-  async.Future<TailLogEntriesResponse> tail(
-    TailLogEntriesRequest request, {
-    core.String? $fields,
-  }) async {
-    final body_ = convert.json.encode(request);
-    final queryParams_ = <core.String, core.List<core.String>>{
-      if ($fields != null) 'fields': [$fields],
-    };
-
-    const url_ = 'v2/entries:tail';
-
-    final response_ = await _requester.request(
-      url_,
-      'POST',
-      body: body_,
-      queryParams: queryParams_,
-    );
-    return TailLogEntriesResponse.fromJson(
         response_ as core.Map<core.String, core.dynamic>);
   }
 
@@ -3361,7 +3334,8 @@ class FoldersLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -3411,7 +3385,8 @@ class FoldersLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -4933,6 +4908,14 @@ class FoldersSinksResource {
   /// "billingAccounts/\[BILLING_ACCOUNT_ID\]" "folders/\[FOLDER_ID\]"
   /// Value must have pattern `^folders/\[^/\]+$`.
   ///
+  /// [filter] - Optional. A filter expression to constrain the sinks returned.
+  /// Today, this only supports the following strings: '' 'in_scope("ALL")',
+  /// 'in_scope("ANCESTOR")', 'in_scope("DEFAULT")'.Description of scopes below.
+  /// ALL: Includes all of the sinks which can be returned in any other scope.
+  /// ANCESTOR: Includes intercepting sinks owned by ancestor resources.
+  /// DEFAULT: Includes sinks owned by parent.When the empty string is provided,
+  /// then the filter 'in_scope("DEFAULT")' is applied.
+  ///
   /// [pageSize] - Optional. The maximum number of results to return from this
   /// request. Non-positive values are ignored. The presence of nextPageToken in
   /// the response indicates that more results might be available.
@@ -4954,11 +4937,13 @@ class FoldersSinksResource {
   /// this method will complete with the same error.
   async.Future<ListSinksResponse> list(
     core.String parent, {
+    core.String? filter,
     core.int? pageSize,
     core.String? pageToken,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
       if (pageSize != null) 'pageSize': ['${pageSize}'],
       if (pageToken != null) 'pageToken': [pageToken],
       if ($fields != null) 'fields': [$fields],
@@ -5270,7 +5255,8 @@ class LocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -5320,7 +5306,8 @@ class LocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -7032,7 +7019,8 @@ class OrganizationsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -7082,7 +7070,8 @@ class OrganizationsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -8604,6 +8593,14 @@ class OrganizationsSinksResource {
   /// "billingAccounts/\[BILLING_ACCOUNT_ID\]" "folders/\[FOLDER_ID\]"
   /// Value must have pattern `^organizations/\[^/\]+$`.
   ///
+  /// [filter] - Optional. A filter expression to constrain the sinks returned.
+  /// Today, this only supports the following strings: '' 'in_scope("ALL")',
+  /// 'in_scope("ANCESTOR")', 'in_scope("DEFAULT")'.Description of scopes below.
+  /// ALL: Includes all of the sinks which can be returned in any other scope.
+  /// ANCESTOR: Includes intercepting sinks owned by ancestor resources.
+  /// DEFAULT: Includes sinks owned by parent.When the empty string is provided,
+  /// then the filter 'in_scope("DEFAULT")' is applied.
+  ///
   /// [pageSize] - Optional. The maximum number of results to return from this
   /// request. Non-positive values are ignored. The presence of nextPageToken in
   /// the response indicates that more results might be available.
@@ -8625,11 +8622,13 @@ class OrganizationsSinksResource {
   /// this method will complete with the same error.
   async.Future<ListSinksResponse> list(
     core.String parent, {
+    core.String? filter,
     core.int? pageSize,
     core.String? pageToken,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
       if (pageSize != null) 'pageSize': ['${pageSize}'],
       if (pageToken != null) 'pageToken': [pageToken],
       if ($fields != null) 'fields': [$fields],
@@ -9299,7 +9298,8 @@ class ProjectsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -9349,7 +9349,8 @@ class ProjectsLocationsBucketsResource {
   ///
   /// [bucketId] - Required. A client-assigned identifier such as "my-bucket".
   /// Identifiers are limited to 100 characters and can include only letters,
-  /// digits, underscores, hyphens, and periods.
+  /// digits, underscores, hyphens, and periods. Bucket identifiers must start
+  /// with an alphanumeric character.
   ///
   /// [$fields] - Selector specifying which fields to include in a partial
   /// response.
@@ -11085,6 +11086,14 @@ class ProjectsSinksResource {
   /// "billingAccounts/\[BILLING_ACCOUNT_ID\]" "folders/\[FOLDER_ID\]"
   /// Value must have pattern `^projects/\[^/\]+$`.
   ///
+  /// [filter] - Optional. A filter expression to constrain the sinks returned.
+  /// Today, this only supports the following strings: '' 'in_scope("ALL")',
+  /// 'in_scope("ANCESTOR")', 'in_scope("DEFAULT")'.Description of scopes below.
+  /// ALL: Includes all of the sinks which can be returned in any other scope.
+  /// ANCESTOR: Includes intercepting sinks owned by ancestor resources.
+  /// DEFAULT: Includes sinks owned by parent.When the empty string is provided,
+  /// then the filter 'in_scope("DEFAULT")' is applied.
+  ///
   /// [pageSize] - Optional. The maximum number of results to return from this
   /// request. Non-positive values are ignored. The presence of nextPageToken in
   /// the response indicates that more results might be available.
@@ -11106,11 +11115,13 @@ class ProjectsSinksResource {
   /// this method will complete with the same error.
   async.Future<ListSinksResponse> list(
     core.String parent, {
+    core.String? filter,
     core.int? pageSize,
     core.String? pageToken,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
       if (pageSize != null) 'pageSize': ['${pageSize}'],
       if (pageToken != null) 'pageToken': [pageToken],
       if ($fields != null) 'fields': [$fields],
@@ -11470,6 +11481,14 @@ class SinksResource {
   /// "billingAccounts/\[BILLING_ACCOUNT_ID\]" "folders/\[FOLDER_ID\]"
   /// Value must have pattern `^\[^/\]+/\[^/\]+$`.
   ///
+  /// [filter] - Optional. A filter expression to constrain the sinks returned.
+  /// Today, this only supports the following strings: '' 'in_scope("ALL")',
+  /// 'in_scope("ANCESTOR")', 'in_scope("DEFAULT")'.Description of scopes below.
+  /// ALL: Includes all of the sinks which can be returned in any other scope.
+  /// ANCESTOR: Includes intercepting sinks owned by ancestor resources.
+  /// DEFAULT: Includes sinks owned by parent.When the empty string is provided,
+  /// then the filter 'in_scope("DEFAULT")' is applied.
+  ///
   /// [pageSize] - Optional. The maximum number of results to return from this
   /// request. Non-positive values are ignored. The presence of nextPageToken in
   /// the response indicates that more results might be available.
@@ -11491,11 +11510,13 @@ class SinksResource {
   /// this method will complete with the same error.
   async.Future<ListSinksResponse> list(
     core.String parent, {
+    core.String? filter,
     core.int? pageSize,
     core.String? pageToken,
     core.String? $fields,
   }) async {
     final queryParams_ = <core.String, core.List<core.String>>{
+      if (filter != null) 'filter': [filter],
       if (pageSize != null) 'pageSize': ['${pageSize}'],
       if (pageToken != null) 'pageToken': [pageToken],
       if ($fields != null) 'fields': [$fields],
@@ -13147,8 +13168,6 @@ typedef Location = $Location01;
 class LogBucket {
   /// Whether log analytics is enabled for this bucket.Once enabled, log
   /// analytics features cannot be disabled.
-  ///
-  /// Optional.
   core.bool? analyticsEnabled;
 
   /// The CMEK settings of the log bucket.
@@ -14170,6 +14189,19 @@ class LogSink {
   /// Optional.
   core.bool? includeChildren;
 
+  /// This field applies only to sinks owned by organizations and folders.When
+  /// the value of 'intercept_children' is true, the following restrictions
+  /// apply: The sink must have the include_children flag set to true.
+  ///
+  /// The sink destination must be a Cloud project.Also, the following behaviors
+  /// apply: Any logs matched by the sink won't be included by non-_Required
+  /// sinks owned by child resources. The sink appears in the results of a
+  /// ListSinks call from a child resource if the value of the filter field in
+  /// its request is either 'in_scope("ALL")' or 'in_scope("ANCESTOR")'.
+  ///
+  /// Optional.
+  core.bool? interceptChildren;
+
   /// The client-assigned sink identifier, unique within the project.For
   /// example: "my-syslog-errors-to-pubsub".Sink identifiers are limited to 100
   /// characters and can include only the following characters: upper and
@@ -14191,6 +14223,17 @@ class LogSink {
     'Not supported. Member documentation may have more information.',
   )
   core.String? outputVersionFormat;
+
+  /// The resource name of the sink.
+  ///
+  /// "projects/\[PROJECT_ID\]/sinks/\[SINK_NAME\]
+  /// "organizations/\[ORGANIZATION_ID\]/sinks/\[SINK_NAME\]
+  /// "billingAccounts/\[BILLING_ACCOUNT_ID\]/sinks/\[SINK_NAME\]
+  /// "folders/\[FOLDER_ID\]/sinks/\[SINK_NAME\] For example:
+  /// projects/my_project/sinks/SINK_NAME
+  ///
+  /// Output only.
+  core.String? resourceName;
 
   /// The last update timestamp of the sink.This field may not be present for
   /// older sinks.
@@ -14224,8 +14267,10 @@ class LogSink {
     this.exclusions,
     this.filter,
     this.includeChildren,
+    this.interceptChildren,
     this.name,
     this.outputVersionFormat,
+    this.resourceName,
     this.updateTime,
     this.writerIdentity,
   });
@@ -14260,9 +14305,15 @@ class LogSink {
           includeChildren: json_.containsKey('includeChildren')
               ? json_['includeChildren'] as core.bool
               : null,
+          interceptChildren: json_.containsKey('interceptChildren')
+              ? json_['interceptChildren'] as core.bool
+              : null,
           name: json_.containsKey('name') ? json_['name'] as core.String : null,
           outputVersionFormat: json_.containsKey('outputVersionFormat')
               ? json_['outputVersionFormat'] as core.String
+              : null,
+          resourceName: json_.containsKey('resourceName')
+              ? json_['resourceName'] as core.String
               : null,
           updateTime: json_.containsKey('updateTime')
               ? json_['updateTime'] as core.String
@@ -14281,9 +14332,11 @@ class LogSink {
         if (exclusions != null) 'exclusions': exclusions!,
         if (filter != null) 'filter': filter!,
         if (includeChildren != null) 'includeChildren': includeChildren!,
+        if (interceptChildren != null) 'interceptChildren': interceptChildren!,
         if (name != null) 'name': name!,
         if (outputVersionFormat != null)
           'outputVersionFormat': outputVersionFormat!,
+        if (resourceName != null) 'resourceName': resourceName!,
         if (updateTime != null) 'updateTime': updateTime!,
         if (writerIdentity != null) 'writerIdentity': writerIdentity!,
       };
@@ -15062,7 +15115,7 @@ class SavedQuery {
 
   /// The user specified title for the SavedQuery.
   ///
-  /// Optional.
+  /// Required.
   core.String? displayName;
 
   /// Logging query that can be executed in Logs Explorer or via Logging API.
@@ -15086,6 +15139,16 @@ class SavedQuery {
   /// Output only.
   core.String? updateTime;
 
+  /// The visibility status of this query, which determines its ownership.
+  ///
+  /// Required.
+  /// Possible string values are:
+  /// - "VISIBILITY_UNSPECIFIED" : The saved query visibility is unspecified. A
+  /// CreateSavedQuery request with an unspecified visibility will be rejected.
+  /// - "PRIVATE" : The saved query is only visible to the user that created it.
+  /// - "SHARED" : The saved query is visible to anyone in the project.
+  core.String? visibility;
+
   SavedQuery({
     this.createTime,
     this.description,
@@ -15094,6 +15157,7 @@ class SavedQuery {
     this.name,
     this.opsAnalyticsQuery,
     this.updateTime,
+    this.visibility,
   });
 
   SavedQuery.fromJson(core.Map json_)
@@ -15119,6 +15183,9 @@ class SavedQuery {
           updateTime: json_.containsKey('updateTime')
               ? json_['updateTime'] as core.String
               : null,
+          visibility: json_.containsKey('visibility')
+              ? json_['visibility'] as core.String
+              : null,
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
@@ -15129,29 +15196,13 @@ class SavedQuery {
         if (name != null) 'name': name!,
         if (opsAnalyticsQuery != null) 'opsAnalyticsQuery': opsAnalyticsQuery!,
         if (updateTime != null) 'updateTime': updateTime!,
+        if (visibility != null) 'visibility': visibility!,
       };
 }
 
 /// Describes the settings associated with a project, folder, organization, or
 /// billing account.
 class Settings {
-  /// The default analytics mode of an org or folder which is inherited by all
-  /// newly created child project buckets.
-  ///
-  /// Optional.
-  /// Possible string values are:
-  /// - "ANALYTICS_MODE_UNSPECIFIED" : No default analytics mode defined at this
-  /// resource level, it will inherit from the closest ancester which has a
-  /// defined analytics mode. If there is no specified analytics mode across the
-  /// resource hierarchy, analytics will be disabled by default.
-  /// - "ANALYTICS_ENABLED" : By default, analytics will be enabled for all new
-  /// project-level buckets unless explicitly specified otherwise at bucket
-  /// creation time.
-  /// - "ANALYTICS_DISABLED" : By default, analytics will be disabled for new
-  /// project-level buckets unless explicitly specified otherwise at bucket
-  /// creation time.
-  core.String? analyticsMode;
-
   /// Overrides the built-in configuration for _Default sink.
   ///
   /// Optional.
@@ -15220,7 +15271,6 @@ class Settings {
   core.String? storageLocation;
 
   Settings({
-    this.analyticsMode,
     this.defaultSinkConfig,
     this.disableDefaultSink,
     this.kmsKeyName,
@@ -15232,9 +15282,6 @@ class Settings {
 
   Settings.fromJson(core.Map json_)
       : this(
-          analyticsMode: json_.containsKey('analyticsMode')
-              ? json_['analyticsMode'] as core.String
-              : null,
           defaultSinkConfig: json_.containsKey('defaultSinkConfig')
               ? DefaultSinkConfig.fromJson(json_['defaultSinkConfig']
                   as core.Map<core.String, core.dynamic>)
@@ -15258,7 +15305,6 @@ class Settings {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
-        if (analyticsMode != null) 'analyticsMode': analyticsMode!,
         if (defaultSinkConfig != null) 'defaultSinkConfig': defaultSinkConfig!,
         if (disableDefaultSink != null)
           'disableDefaultSink': disableDefaultSink!,
@@ -15303,148 +15349,6 @@ class SummaryField {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (field != null) 'field': field!,
-      };
-}
-
-/// Information about entries that were omitted from the session.
-class SuppressionInfo {
-  /// The reason that entries were omitted from the session.
-  /// Possible string values are:
-  /// - "REASON_UNSPECIFIED" : Unexpected default.
-  /// - "RATE_LIMIT" : Indicates suppression occurred due to relevant entries
-  /// being received in excess of rate limits. For quotas and limits, see
-  /// Logging API quotas and limits
-  /// (https://cloud.google.com/logging/quotas#api-limits).
-  /// - "NOT_CONSUMED" : Indicates suppression occurred due to the client not
-  /// consuming responses quickly enough.
-  core.String? reason;
-
-  /// A lower bound on the count of entries omitted due to reason.
-  core.int? suppressedCount;
-
-  SuppressionInfo({
-    this.reason,
-    this.suppressedCount,
-  });
-
-  SuppressionInfo.fromJson(core.Map json_)
-      : this(
-          reason: json_.containsKey('reason')
-              ? json_['reason'] as core.String
-              : null,
-          suppressedCount: json_.containsKey('suppressedCount')
-              ? json_['suppressedCount'] as core.int
-              : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (reason != null) 'reason': reason!,
-        if (suppressedCount != null) 'suppressedCount': suppressedCount!,
-      };
-}
-
-/// The parameters to TailLogEntries.
-class TailLogEntriesRequest {
-  /// The amount of time to buffer log entries at the server before being
-  /// returned to prevent out of order results due to late arriving log entries.
-  ///
-  /// Valid values are between 0-60000 milliseconds. Defaults to 2000
-  /// milliseconds.
-  ///
-  /// Optional.
-  core.String? bufferWindow;
-
-  /// Only log entries that match the filter are returned.
-  ///
-  /// An empty filter matches all log entries in the resources listed in
-  /// resource_names. Referencing a parent resource that is not listed in
-  /// resource_names will cause the filter to return no results. The maximum
-  /// length of a filter is 20,000 characters.
-  ///
-  /// Optional.
-  core.String? filter;
-
-  /// Name of a parent resource from which to retrieve log entries:
-  /// projects/\[PROJECT_ID\] organizations/\[ORGANIZATION_ID\]
-  /// billingAccounts/\[BILLING_ACCOUNT_ID\] folders/\[FOLDER_ID\]May
-  /// alternatively be one or more views:
-  /// projects/\[PROJECT_ID\]/locations/\[LOCATION_ID\]/buckets/\[BUCKET_ID\]/views/\[VIEW_ID\]
-  /// organizations/\[ORGANIZATION_ID\]/locations/\[LOCATION_ID\]/buckets/\[BUCKET_ID\]/views/\[VIEW_ID\]
-  /// billingAccounts/\[BILLING_ACCOUNT_ID\]/locations/\[LOCATION_ID\]/buckets/\[BUCKET_ID\]/views/\[VIEW_ID\]
-  /// folders/\[FOLDER_ID\]/locations/\[LOCATION_ID\]/buckets/\[BUCKET_ID\]/views/\[VIEW_ID\]
-  ///
-  /// Required.
-  core.List<core.String>? resourceNames;
-
-  TailLogEntriesRequest({
-    this.bufferWindow,
-    this.filter,
-    this.resourceNames,
-  });
-
-  TailLogEntriesRequest.fromJson(core.Map json_)
-      : this(
-          bufferWindow: json_.containsKey('bufferWindow')
-              ? json_['bufferWindow'] as core.String
-              : null,
-          filter: json_.containsKey('filter')
-              ? json_['filter'] as core.String
-              : null,
-          resourceNames: json_.containsKey('resourceNames')
-              ? (json_['resourceNames'] as core.List)
-                  .map((value) => value as core.String)
-                  .toList()
-              : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (bufferWindow != null) 'bufferWindow': bufferWindow!,
-        if (filter != null) 'filter': filter!,
-        if (resourceNames != null) 'resourceNames': resourceNames!,
-      };
-}
-
-/// Result returned from TailLogEntries.
-class TailLogEntriesResponse {
-  /// A list of log entries.
-  ///
-  /// Each response in the stream will order entries with increasing values of
-  /// LogEntry.timestamp. Ordering is not guaranteed between separate responses.
-  core.List<LogEntry>? entries;
-
-  /// If entries that otherwise would have been included in the session were not
-  /// sent back to the client, counts of relevant entries omitted from the
-  /// session with the reason that they were not included.
-  ///
-  /// There will be at most one of each reason per response. The counts
-  /// represent the number of suppressed entries since the last streamed
-  /// response.
-  core.List<SuppressionInfo>? suppressionInfo;
-
-  TailLogEntriesResponse({
-    this.entries,
-    this.suppressionInfo,
-  });
-
-  TailLogEntriesResponse.fromJson(core.Map json_)
-      : this(
-          entries: json_.containsKey('entries')
-              ? (json_['entries'] as core.List)
-                  .map((value) => LogEntry.fromJson(
-                      value as core.Map<core.String, core.dynamic>))
-                  .toList()
-              : null,
-          suppressionInfo: json_.containsKey('suppressionInfo')
-              ? (json_['suppressionInfo'] as core.List)
-                  .map((value) => SuppressionInfo.fromJson(
-                      value as core.Map<core.String, core.dynamic>))
-                  .toList()
-              : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (entries != null) 'entries': entries!,
-        if (suppressionInfo != null) 'suppressionInfo': suppressionInfo!,
       };
 }
 

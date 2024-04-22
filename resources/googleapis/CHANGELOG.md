@@ -1,3 +1,15 @@
+## 13.2.0-wip
+
+- `addressvalidation` - new!
+- `cloudcontrolspartner` - new!
+- `solar` - new!
+
+## 13.1.0
+
+ - `logging` - removed (*BROKEN*) `tail()` function call.
+ - `dataportability` - new!
+ - `speech` - added `v2`
+
 ## 13.0.0
 
  - `apphub` - new!

@@ -25,7 +25,7 @@
     "ownerDomain": "google.com",
     "ownerName": "Google",
     "protocol": "rest",
-    "revision": "20240212",
+    "revision": "20240328",
     "rootUrl": "https://documentai.googleapis.com/",
     "servicePath": "",
     "title": "Cloud Document AI API",
@@ -2583,7 +2583,7 @@
             "properties": {
                 "boundingPoly": {
                     "$ref": "GoogleCloudDocumentaiV1BoundingPoly",
-                    "description": "Optional. Identifies the bounding polygon of a layout element on the page."
+                    "description": "Optional. Identifies the bounding polygon of a layout element on the page. If `layout_type` is set, the bounding polygon must be exactly the same to the layout element it's referring to."
                 },
                 "confidence": {
                     "description": "Optional. Confidence of detected page element, if applicable. Range `[0, 1]`.",
@@ -3382,6 +3382,10 @@
             "description": "Defines properties that can be part of the entity type.",
             "id": "GoogleCloudDocumentaiV1DocumentSchemaEntityTypeProperty",
             "properties": {
+                "displayName": {
+                    "description": "User defined name for the property.",
+                    "type": "string"
+                },
                 "name": {
                     "description": "The name of the property. Follows the same guidelines as the EntityType name.",
                     "type": "string"
@@ -4118,6 +4122,10 @@
                 "ocrConfig": {
                     "$ref": "GoogleCloudDocumentaiV1OcrConfig",
                     "description": "Only applicable to `OCR_PROCESSOR` and `FORM_PARSER_PROCESSOR`. Returns error if set on other processor types."
+                },
+                "schemaOverride": {
+                    "$ref": "GoogleCloudDocumentaiV1DocumentSchema",
+                    "description": "Optional. Override the schema of the ProcessorVersion. Will return an Invalid Argument error if this field is set when the underlying ProcessorVersion doesn't support schema override."
                 }
             },
             "type": "object"
@@ -4388,11 +4396,11 @@
                     "type": "string"
                 },
                 "name": {
-                    "description": "The resource name of the processor version. Format: `projects/{project}/locations/{location}/processors/{processor}/processorVersions/{processor_version}`",
+                    "description": "Identifier. The resource name of the processor version. Format: `projects/{project}/locations/{location}/processors/{processor}/processorVersions/{processor_version}`",
                     "type": "string"
                 },
                 "state": {
-                    "description": "The state of the processor version.",
+                    "description": "Output only. The state of the processor version.",
                     "enum": [
                         "STATE_UNSPECIFIED",
                         "DEPLOYED",
@@ -4415,6 +4423,7 @@
                         "The processor version failed and is in an indeterminate state.",
                         "The processor version is being imported."
                     ],
+                    "readOnly": true,
                     "type": "string"
                 }
             },
@@ -4640,6 +4649,10 @@
                     "$ref": "GoogleCloudDocumentaiV1DocumentSchema",
                     "description": "Optional. The schema the processor version will be trained with."
                 },
+                "foundationModelTuningOptions": {
+                    "$ref": "GoogleCloudDocumentaiV1TrainProcessorVersionRequestFoundationModelTuningOptions",
+                    "description": "Options to control foundation model tuning of a processor."
+                },
                 "inputData": {
                     "$ref": "GoogleCloudDocumentaiV1TrainProcessorVersionRequestInputData",
                     "description": "Optional. The input data used to train the ProcessorVersion."
@@ -4668,6 +4681,23 @@
                         ""
                     ],
                     "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "GoogleCloudDocumentaiV1TrainProcessorVersionRequestFoundationModelTuningOptions": {
+            "description": "Options to control foundation model tuning of the processor.",
+            "id": "GoogleCloudDocumentaiV1TrainProcessorVersionRequestFoundationModelTuningOptions",
+            "properties": {
+                "learningRateMultiplier": {
+                    "description": "Optional. The multiplier to apply to the recommended learning rate. Valid values are between 0.1 and 10. If not provided, recommended learning rate will be used.",
+                    "format": "float",
+                    "type": "number"
+                },
+                "trainSteps": {
+                    "description": "Optional. The number of steps to run for model tuning. Valid values are between 1 and 400. If not provided, recommended steps will be used.",
+                    "format": "int32",
+                    "type": "integer"
                 }
             },
             "type": "object"
@@ -5112,7 +5142,7 @@
             "properties": {
                 "boundingPoly": {
                     "$ref": "GoogleCloudDocumentaiV1beta1BoundingPoly",
-                    "description": "Optional. Identifies the bounding polygon of a layout element on the page."
+                    "description": "Optional. Identifies the bounding polygon of a layout element on the page. If `layout_type` is set, the bounding polygon must be exactly the same to the layout element it's referring to."
                 },
                 "confidence": {
                     "description": "Optional. Confidence of detected page element, if applicable. Range `[0, 1]`.",
@@ -6513,7 +6543,7 @@
             "properties": {
                 "boundingPoly": {
                     "$ref": "GoogleCloudDocumentaiV1beta2BoundingPoly",
-                    "description": "Optional. Identifies the bounding polygon of a layout element on the page."
+                    "description": "Optional. Identifies the bounding polygon of a layout element on the page. If `layout_type` is set, the bounding polygon must be exactly the same to the layout element it's referring to."
                 },
                 "confidence": {
                     "description": "Optional. Confidence of detected page element, if applicable. Range `[0, 1]`.",

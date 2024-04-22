@@ -75,6 +75,15 @@ class WorkspaceEventsApi {
   static const chatSpacesReadonlyScope =
       'https://www.googleapis.com/auth/chat.spaces.readonly';
 
+  /// Create, edit, and see information about your Google Meet conferences
+  /// created by the app.
+  static const meetingsSpaceCreatedScope =
+      'https://www.googleapis.com/auth/meetings.space.created';
+
+  /// Read information about any of your Google Meet conferences
+  static const meetingsSpaceReadonlyScope =
+      'https://www.googleapis.com/auth/meetings.space.readonly';
+
   final commons.ApiRequester _requester;
 
   OperationsResource get operations => OperationsResource(_requester);
@@ -361,10 +370,12 @@ class SubscriptionsResource {
   /// subscription. Format: `subscriptions/{subscription}`
   /// Value must have pattern `^subscriptions/\[^/\]+$`.
   ///
-  /// [updateMask] - Optional. Required. The field to update. You can update one
-  /// of the following fields in a subscription: * `expire_time`: The timestamp
-  /// when the subscription expires. * `ttl`: The time-to-live (TTL) or duration
-  /// of the subscription.
+  /// [updateMask] - Optional. The field to update. If omitted, updates any
+  /// fields included in the request. You can update one of the following fields
+  /// in a subscription: * `expire_time`: The timestamp when the subscription
+  /// expires. * `ttl`: The time-to-live (TTL) or duration of the subscription.
+  /// To fully replace the subscription (the equivalent of `PUT`), use `*`. Any
+  /// omitted fields are updated with empty values.
   ///
   /// [validateOnly] - Optional. If set to `true`, validates and previews the
   /// request, but doesn't update the subscription.

@@ -2448,6 +2448,7 @@ class GoogleCloudContactcenterinsightsV1AnnotatorSelectorSummarizationConfig {
   /// Possible string values are:
   /// - "SUMMARIZATION_MODEL_UNSPECIFIED" : Unspecified summarization model.
   /// - "BASELINE_MODEL" : The CCAI baseline model.
+  /// - "BASELINE_MODEL_V2_0" : The CCAI baseline model, V2.0.
   core.String? summarizationModel;
 
   GoogleCloudContactcenterinsightsV1AnnotatorSelectorSummarizationConfig({
@@ -5908,8 +5909,9 @@ class GoogleCloudContactcenterinsightsV1Settings {
   /// occurs. * "create-analysis": Notify each time an analysis is created. *
   /// "create-conversation": Notify each time a conversation is created. *
   /// "export-insights-data": Notify each time an export is complete. *
-  /// "update-conversation": Notify each time a conversation is updated via
-  /// UpdateConversation. * "upload-conversation": Notify when an
+  /// "ingest-conversations": Notify each time an IngestConversations LRO
+  /// completes. * "update-conversation": Notify each time a conversation is
+  /// updated via UpdateConversation. * "upload-conversation": Notify when an
   /// UploadConversation LRO completes. Values are Pub/Sub topics. The format of
   /// each Pub/Sub topic is: projects/{project}/topics/{topic}
   core.Map<core.String, core.String>? pubsubNotificationSettings;

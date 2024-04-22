@@ -834,38 +834,46 @@ class AbortInfo {
   /// Causes that the analysis is aborted.
   /// Possible string values are:
   /// - "CAUSE_UNSPECIFIED" : Cause is unspecified.
-  /// - "UNKNOWN_NETWORK" : Aborted due to unknown network. The reachability
-  /// analysis cannot proceed because the user does not have access to the host
-  /// project's network configurations, including firewall rules and routes.
-  /// This happens when the project is a service project and the endpoints being
-  /// traced are in the host project's network.
-  /// - "UNKNOWN_IP" : Aborted because the IP address(es) are unknown.
+  /// - "UNKNOWN_NETWORK" : Aborted due to unknown network. Deprecated, not used
+  /// in the new tests.
   /// - "UNKNOWN_PROJECT" : Aborted because no project information can be
-  /// derived from the test input.
-  /// - "PERMISSION_DENIED" : Aborted because the user lacks the permission to
-  /// access all or part of the network configurations required to run the test.
-  /// - "NO_SOURCE_LOCATION" : Aborted because no valid source endpoint is
-  /// derived from the input test request.
-  /// - "INVALID_ARGUMENT" : Aborted because the source and/or destination
-  /// endpoint specified in the test are invalid. The possible reasons that an
-  /// endpoint is invalid include: malformed IP address; nonexistent instance or
-  /// network URI; IP address not in the range of specified network URI; and
-  /// instance not owning the network interface in the specified network.
+  /// derived from the test input. Deprecated, not used in the new tests.
   /// - "NO_EXTERNAL_IP" : Aborted because traffic is sent from a public IP to
-  /// an instance without an external IP.
+  /// an instance without an external IP. Deprecated, not used in the new tests.
   /// - "UNINTENDED_DESTINATION" : Aborted because none of the traces matches
-  /// destination information specified in the input test request.
-  /// - "TRACE_TOO_LONG" : Aborted because the number of steps in the trace
-  /// exceeding a certain limit which may be caused by routing loop.
-  /// - "INTERNAL_ERROR" : Aborted due to internal server error.
+  /// destination information specified in the input test request. Deprecated,
+  /// not used in the new tests.
   /// - "SOURCE_ENDPOINT_NOT_FOUND" : Aborted because the source endpoint could
-  /// not be found.
+  /// not be found. Deprecated, not used in the new tests.
   /// - "MISMATCHED_SOURCE_NETWORK" : Aborted because the source network does
-  /// not match the source endpoint.
+  /// not match the source endpoint. Deprecated, not used in the new tests.
   /// - "DESTINATION_ENDPOINT_NOT_FOUND" : Aborted because the destination
-  /// endpoint could not be found.
+  /// endpoint could not be found. Deprecated, not used in the new tests.
   /// - "MISMATCHED_DESTINATION_NETWORK" : Aborted because the destination
-  /// network does not match the destination endpoint.
+  /// network does not match the destination endpoint. Deprecated, not used in
+  /// the new tests.
+  /// - "UNKNOWN_IP" : Aborted because no endpoint with the packet's destination
+  /// IP address is found.
+  /// - "SOURCE_IP_ADDRESS_NOT_IN_SOURCE_NETWORK" : Aborted because the source
+  /// IP address doesn't belong to any of the subnets of the source VPC network.
+  /// - "PERMISSION_DENIED" : Aborted because user lacks permission to access
+  /// all or part of the network configurations required to run the test.
+  /// - "PERMISSION_DENIED_NO_CLOUD_NAT_CONFIGS" : Aborted because user lacks
+  /// permission to access Cloud NAT configs required to run the test.
+  /// - "PERMISSION_DENIED_NO_NEG_ENDPOINT_CONFIGS" : Aborted because user lacks
+  /// permission to access Network endpoint group endpoint configs required to
+  /// run the test.
+  /// - "NO_SOURCE_LOCATION" : Aborted because no valid source or destination
+  /// endpoint is derived from the input test request.
+  /// - "INVALID_ARGUMENT" : Aborted because the source or destination endpoint
+  /// specified in the request is invalid. Some examples: - The request might
+  /// contain malformed resource URI, project ID, or IP address. - The request
+  /// might contain inconsistent information (for example, the request might
+  /// include both the instance and the network, but the instance might not have
+  /// a NIC in that network).
+  /// - "TRACE_TOO_LONG" : Aborted because the number of steps in the trace
+  /// exceeds a certain limit. It might be caused by a routing loop.
+  /// - "INTERNAL_ERROR" : Aborted due to internal server error.
   /// - "UNSUPPORTED" : Aborted because the test scenario is not supported.
   /// - "MISMATCHED_IP_VERSION" : Aborted because the source and destination
   /// resources have no common IP version.
@@ -874,6 +882,14 @@ class AbortInfo {
   /// by the node and managed by the Konnectivity proxy.
   /// - "RESOURCE_CONFIG_NOT_FOUND" : Aborted because expected resource
   /// configuration was missing.
+  /// - "VM_INSTANCE_CONFIG_NOT_FOUND" : Aborted because expected VM instance
+  /// configuration was missing.
+  /// - "NETWORK_CONFIG_NOT_FOUND" : Aborted because expected network
+  /// configuration was missing.
+  /// - "FIREWALL_CONFIG_NOT_FOUND" : Aborted because expected firewall
+  /// configuration was missing.
+  /// - "ROUTE_CONFIG_NOT_FOUND" : Aborted because expected route configuration
+  /// was missing.
   /// - "GOOGLE_MANAGED_SERVICE_AMBIGUOUS_PSC_ENDPOINT" : Aborted because a PSC
   /// endpoint selection for the Google-managed service is ambiguous (several
   /// PSC endpoints satisfy test input).
@@ -883,12 +899,18 @@ class AbortInfo {
   /// forwarding rule as a source are not supported.
   /// - "NON_ROUTABLE_IP_ADDRESS" : Aborted because one of the endpoints is a
   /// non-routable IP address (loopback, link-local, etc).
+  /// - "UNKNOWN_ISSUE_IN_GOOGLE_MANAGED_PROJECT" : Aborted due to an unknown
+  /// issue in the Google-managed project.
+  /// - "UNSUPPORTED_GOOGLE_MANAGED_PROJECT_CONFIG" : Aborted due to an
+  /// unsupported configuration of the Google-managed project.
   core.String? cause;
 
-  /// List of project IDs that the user has specified in the request but does
-  /// not have permission to access network configs.
+  /// IP address that caused the abort.
+  core.String? ipAddress;
+
+  /// List of project IDs the user specified in the request but lacks access to.
   ///
-  /// Analysis is aborted in this case with the PERMISSION_DENIED cause.
+  /// In this case, analysis is aborted with the PERMISSION_DENIED cause.
   core.List<core.String>? projectsMissingPermission;
 
   /// URI of the resource that caused the abort.
@@ -896,6 +918,7 @@ class AbortInfo {
 
   AbortInfo({
     this.cause,
+    this.ipAddress,
     this.projectsMissingPermission,
     this.resourceUri,
   });
@@ -904,6 +927,9 @@ class AbortInfo {
       : this(
           cause:
               json_.containsKey('cause') ? json_['cause'] as core.String : null,
+          ipAddress: json_.containsKey('ipAddress')
+              ? json_['ipAddress'] as core.String
+              : null,
           projectsMissingPermission:
               json_.containsKey('projectsMissingPermission')
                   ? (json_['projectsMissingPermission'] as core.List)
@@ -917,6 +943,7 @@ class AbortInfo {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (cause != null) 'cause': cause!,
+        if (ipAddress != null) 'ipAddress': ipAddress!,
         if (projectsMissingPermission != null)
           'projectsMissingPermission': projectsMissingPermission!,
         if (resourceUri != null) 'resourceUri': resourceUri!,
@@ -1355,6 +1382,11 @@ class CloudSQLInstanceInfo {
 
 /// A Connectivity Test for a network reachability analysis.
 class ConnectivityTest {
+  /// Whether the test should skip firewall checking.
+  ///
+  /// If not provided, we assume false.
+  core.bool? bypassFirewallChecks;
+
   /// The time the test was created.
   ///
   /// Output only.
@@ -1447,6 +1479,7 @@ class ConnectivityTest {
   core.String? updateTime;
 
   ConnectivityTest({
+    this.bypassFirewallChecks,
     this.createTime,
     this.description,
     this.destination,
@@ -1463,6 +1496,9 @@ class ConnectivityTest {
 
   ConnectivityTest.fromJson(core.Map json_)
       : this(
+          bypassFirewallChecks: json_.containsKey('bypassFirewallChecks')
+              ? json_['bypassFirewallChecks'] as core.bool
+              : null,
           createTime: json_.containsKey('createTime')
               ? json_['createTime'] as core.String
               : null,
@@ -1511,6 +1547,8 @@ class ConnectivityTest {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
+        if (bypassFirewallChecks != null)
+          'bypassFirewallChecks': bypassFirewallChecks!,
         if (createTime != null) 'createTime': createTime!,
         if (description != null) 'description': description!,
         if (destination != null) 'destination': destination!,
@@ -1529,6 +1567,9 @@ class ConnectivityTest {
 
 /// Details of the final state "deliver" and associated resource.
 class DeliverInfo {
+  /// IP address of the target (if applicable).
+  core.String? ipAddress;
+
   /// URI of the resource that the packet is delivered to.
   core.String? resourceUri;
 
@@ -1559,12 +1600,16 @@ class DeliverInfo {
   core.String? target;
 
   DeliverInfo({
+    this.ipAddress,
     this.resourceUri,
     this.target,
   });
 
   DeliverInfo.fromJson(core.Map json_)
       : this(
+          ipAddress: json_.containsKey('ipAddress')
+              ? json_['ipAddress'] as core.String
+              : null,
           resourceUri: json_.containsKey('resourceUri')
               ? json_['resourceUri'] as core.String
               : null,
@@ -1574,6 +1619,7 @@ class DeliverInfo {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
+        if (ipAddress != null) 'ipAddress': ipAddress!,
         if (resourceUri != null) 'resourceUri': resourceUri!,
         if (target != null) 'target': target!,
       };
@@ -1603,7 +1649,7 @@ class DropInfo {
   /// - "ROUTE_NEXT_HOP_RESOURCE_NOT_FOUND" : Route's next hop resource is not
   /// found.
   /// - "ROUTE_NEXT_HOP_INSTANCE_WRONG_NETWORK" : Route's next hop instance
-  /// doesn't hace a NIC in the route's network.
+  /// doesn't have a NIC in the route's network.
   /// - "ROUTE_NEXT_HOP_INSTANCE_NON_PRIMARY_IP" : Route's next hop IP address
   /// is not a primary IP address of the next hop instance.
   /// - "ROUTE_NEXT_HOP_FORWARDING_RULE_IP_MISMATCH" : Route's next hop
@@ -1711,6 +1757,11 @@ class DropInfo {
   /// - "PSC_NEG_PRODUCER_FORWARDING_RULE_MULTIPLE_PORTS" : The packet is sent
   /// to the Private Service Connect backend (network endpoint group), but the
   /// producer PSC forwarding rule has multiple ports specified.
+  /// - "CLOUD_SQL_PSC_NEG_UNSUPPORTED" : The packet is sent to the Private
+  /// Service Connect backend (network endpoint group) targeting a Cloud SQL
+  /// service attachment, but this configuration is not supported.
+  /// - "NO_NAT_SUBNETS_FOR_PSC_SERVICE_ATTACHMENT" : No NAT subnets are defined
+  /// for the PSC service attachment.
   /// - "HYBRID_NEG_NON_DYNAMIC_ROUTE_MATCHED" : The packet sent from the hybrid
   /// NEG proxy matches a non-dynamic route, but such a configuration is not
   /// supported.
@@ -1725,6 +1776,7 @@ class DropInfo {
   /// which requires a proxy-only subnet and the subnet is not found.
   /// - "CLOUD_NAT_NO_ADDRESSES" : Packet sent to Cloud Nat without active NAT
   /// IPs.
+  /// - "ROUTING_LOOP" : Packet is stuck in a routing loop.
   core.String? cause;
 
   /// Destination IP address of the dropped packet (if relevant).
@@ -2243,6 +2295,9 @@ class FirewallInfo {
 
 /// Details of the final state "forward" and associated resource.
 class ForwardInfo {
+  /// IP address of the target (if applicable).
+  core.String? ipAddress;
+
   /// URI of the resource that the packet is forwarded to.
   core.String? resourceUri;
 
@@ -2263,12 +2318,16 @@ class ForwardInfo {
   core.String? target;
 
   ForwardInfo({
+    this.ipAddress,
     this.resourceUri,
     this.target,
   });
 
   ForwardInfo.fromJson(core.Map json_)
       : this(
+          ipAddress: json_.containsKey('ipAddress')
+              ? json_['ipAddress'] as core.String
+              : null,
           resourceUri: json_.containsKey('resourceUri')
               ? json_['resourceUri'] as core.String
               : null,
@@ -2278,6 +2337,7 @@ class ForwardInfo {
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
+        if (ipAddress != null) 'ipAddress': ipAddress!,
         if (resourceUri != null) 'resourceUri': resourceUri!,
         if (target != null) 'target': target!,
       };

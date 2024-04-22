@@ -3980,6 +3980,7 @@ api.LiveChatMessageListResponse buildLiveChatMessageListResponse() {
   final o = api.LiveChatMessageListResponse();
   buildCounterLiveChatMessageListResponse++;
   if (buildCounterLiveChatMessageListResponse < 3) {
+    o.activePollItem = buildLiveChatMessage();
     o.etag = 'foo';
     o.eventId = 'foo';
     o.items = buildUnnamed29();
@@ -3998,6 +3999,7 @@ api.LiveChatMessageListResponse buildLiveChatMessageListResponse() {
 void checkLiveChatMessageListResponse(api.LiveChatMessageListResponse o) {
   buildCounterLiveChatMessageListResponse++;
   if (buildCounterLiveChatMessageListResponse < 3) {
+    checkLiveChatMessage(o.activePollItem!);
     unittest.expect(
       o.etag!,
       unittest.equals('foo'),
@@ -15071,6 +15073,9 @@ void main() {
     });
 
     unittest.test('method--update', () async {
+      // TODO: Implement tests for media upload;
+      // TODO: Implement tests for media download;
+
       final mock = HttpServerMock();
       final res = api.YouTubeApi(mock).playlistImages;
       final arg_request = buildPlaylistImage();

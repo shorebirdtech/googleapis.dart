@@ -790,6 +790,8 @@ class $AppAssignedTargetingOptionDetails {
   /// - "APP_PLATFORM_ANDROID_TV" : The app platform is Android TV.
   /// - "APP_PLATFORM_GENERIC_CTV" : The app platform is a CTV platform that is
   /// not explicitly listed elsewhere.
+  /// - "APP_PLATFORM_LG_TV" : The app platform is LG TV.
+  /// - "APP_PLATFORM_VIZIO_TV" : The app platform is VIZIO TV.
   core.String? appPlatform;
 
   /// The display name of the app.
@@ -2915,6 +2917,29 @@ class $Checksum {
 
 /// Used by:
 ///
+/// - speech:v1 : ClassItem
+/// - speech:v2 : ClassItem
+class $ClassItem {
+  /// The class item's value.
+  core.String? value;
+
+  $ClassItem({
+    this.value,
+  });
+
+  $ClassItem.fromJson(core.Map json_)
+      : this(
+          value:
+              json_.containsKey('value') ? json_['value'] as core.String : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (value != null) 'value': value!,
+      };
+}
+
+/// Used by:
+///
 /// - language:v1 : ClassificationCategory
 /// - language:v2 : ClassificationCategory
 class $ClassificationCategory {
@@ -3434,6 +3459,52 @@ class $Consent {
   core.Map<core.String, core.dynamic> toJson() => {
         if (adPersonalization != null) 'adPersonalization': adPersonalization!,
         if (adUserData != null) 'adUserData': adUserData!,
+      };
+}
+
+/// Used by:
+///
+/// - assuredworkloads:v1 : GoogleCloudAssuredworkloadsV1ViolationRemediationInstructionsConsole
+/// - cloudcontrolspartner:v1 : Console
+class $Console {
+  /// Additional urls for more information about steps
+  core.List<core.String>? additionalLinks;
+
+  /// Link to console page where violations can be resolved
+  core.List<core.String>? consoleUris;
+
+  /// Steps to resolve violation via cloud console
+  core.List<core.String>? steps;
+
+  $Console({
+    this.additionalLinks,
+    this.consoleUris,
+    this.steps,
+  });
+
+  $Console.fromJson(core.Map json_)
+      : this(
+          additionalLinks: json_.containsKey('additionalLinks')
+              ? (json_['additionalLinks'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+          consoleUris: json_.containsKey('consoleUris')
+              ? (json_['consoleUris'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+          steps: json_.containsKey('steps')
+              ? (json_['steps'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (additionalLinks != null) 'additionalLinks': additionalLinks!,
+        if (consoleUris != null) 'consoleUris': consoleUris!,
+        if (steps != null) 'steps': steps!,
       };
 }
 
@@ -4491,6 +4562,7 @@ class $CustomListTargetingSetting {
 /// - documentai:v1 : GoogleTypeDate
 /// - doubleclickbidmanager:v2 : Date
 /// - drivelabels:v2 : GoogleTypeDate
+/// - gkebackup:v1 : Date
 /// - looker:v1 : Date
 /// - migrationcenter:v1 : Date
 /// - mybusinessbusinessinformation:v1 : Date
@@ -4500,6 +4572,7 @@ class $CustomListTargetingSetting {
 /// - policysimulator:v1 : GoogleTypeDate
 /// - realtimebidding:v1 : Date
 /// - retail:v2 : GoogleTypeDate
+/// - solar:v1 : Date
 /// - storagetransfer:v1 : Date
 /// - testing:v1 : Date
 /// - travelimpactmodel:v1 : Date
@@ -6214,6 +6287,7 @@ class $EgressSource {
 /// - accessapproval:v1 : InvalidateApprovalRequestMessage
 /// - accesscontextmanager:v1 : CancelOperationRequest
 /// - accesscontextmanager:v1 : Empty
+/// - addressvalidation:v1 : GoogleMapsAddressvalidationV1ProvideValidationFeedbackResponse
 /// - admin:directory_v1 : ChangeChromeOsDeviceStatusSucceeded
 /// - admin:directory_v1 : Empty
 /// - adsense:v2 : Empty
@@ -6227,12 +6301,18 @@ class $EgressSource {
 /// - aiplatform:v1 : GoogleCloudAiplatformV1CancelNasJobRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1CancelPipelineJobRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1CancelTrainingPipelineRequest
+/// - aiplatform:v1 : GoogleCloudAiplatformV1CancelTuningJobRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1CheckTrialEarlyStoppingStateRequest
+/// - aiplatform:v1 : GoogleCloudAiplatformV1FeatureOnlineStoreOptimized
+/// - aiplatform:v1 : GoogleCloudAiplatformV1FeatureViewIndexConfigBruteForceConfig
 /// - aiplatform:v1 : GoogleCloudAiplatformV1ListOptimalTrialsRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1PauseModelDeploymentMonitoringJobRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1PauseScheduleRequest
+/// - aiplatform:v1 : GoogleCloudAiplatformV1RaySpec
+/// - aiplatform:v1 : GoogleCloudAiplatformV1RebootPersistentResourceRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1RemoveContextChildrenResponse
 /// - aiplatform:v1 : GoogleCloudAiplatformV1RemoveDatapointsResponse
+/// - aiplatform:v1 : GoogleCloudAiplatformV1ResourceRuntime
 /// - aiplatform:v1 : GoogleCloudAiplatformV1ResumeModelDeploymentMonitoringJobRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1StartNotebookRuntimeRequest
 /// - aiplatform:v1 : GoogleCloudAiplatformV1StopTrialRequest
@@ -6267,6 +6347,8 @@ class $EgressSource {
 /// - androidpublisher:v3 : RevokeSubscriptionPurchaseResponse
 /// - androidpublisher:v3 : SafetyLabelsUpdateResponse
 /// - androidpublisher:v3 : SystemInitiatedCancellation
+/// - androidpublisher:v3 : TargetingRuleScopeAnySubscriptionInApp
+/// - androidpublisher:v3 : TargetingRuleScopeThisSubscription
 /// - androidpublisher:v3 : TestPurchase
 /// - apigateway:v1 : ApigatewayCancelOperationRequest
 /// - apigateway:v1 : Empty
@@ -6295,6 +6377,7 @@ class $EgressSource {
 /// - apphub:v1 : DetachServiceProjectAttachmentRequest
 /// - apphub:v1 : DetachServiceProjectAttachmentResponse
 /// - apphub:v1 : Empty
+/// - artifactregistry:v1 : DownloadFileResponse
 /// - artifactregistry:v1 : Empty
 /// - artifactregistry:v1 : UploadAptArtifactRequest
 /// - artifactregistry:v1 : UploadGoModuleRequest
@@ -6334,8 +6417,13 @@ class $EgressSource {
 /// - bigquerydatatransfer:v1 : CheckValidCredsRequest
 /// - bigquerydatatransfer:v1 : Empty
 /// - bigqueryreservation:v1 : Empty
+/// - bigqueryreservation:v1 : FailoverReservationRequest
+/// - bigtableadmin:v2 : DataBoostReadLocalWrites
 /// - bigtableadmin:v2 : Empty
 /// - bigtableadmin:v2 : GenerateConsistencyTokenRequest
+/// - bigtableadmin:v2 : GoogleBigtableAdminV2TypeAggregateSum
+/// - bigtableadmin:v2 : GoogleBigtableAdminV2TypeBytesEncodingRaw
+/// - bigtableadmin:v2 : StandardReadRemoteWrites
 /// - bigtableadmin:v2 : UndeleteTableRequest
 /// - billingbudgets:v1 : GoogleCloudBillingBudgetsV1LastPeriodAmount
 /// - billingbudgets:v1 : GoogleProtobufEmpty
@@ -6443,10 +6531,12 @@ class $EgressSource {
 /// - contactcenterinsights:v1 : GoogleProtobufEmpty
 /// - container:v1 : CompleteNodePoolUpgradeRequest
 /// - container:v1 : Empty
+/// - container:v1 : SecondaryBootDiskUpdateStrategy
 /// - containeranalysis:v1 : CloudStorageLocation
 /// - containeranalysis:v1 : Empty
 /// - content:v2.1 : ActivateBuyOnGoogleProgramRequest
 /// - content:v2.1 : CaptureOrderRequest
+/// - content:v2.1 : InputFieldCheckboxInput
 /// - content:v2.1 : PauseBuyOnGoogleProgramRequest
 /// - content:v2.1 : RequestReviewBuyOnGoogleProgramRequest
 /// - content:v2.1 : UndeleteConversionSourceRequest
@@ -6474,7 +6564,6 @@ class $EgressSource {
 /// - datamigration:v1 : DemoteDestinationRequest
 /// - datamigration:v1 : Empty
 /// - datamigration:v1 : PromoteMigrationJobRequest
-/// - datamigration:v1 : ResumeMigrationJobRequest
 /// - datamigration:v1 : RollbackConversionWorkspaceRequest
 /// - datamigration:v1 : StaticIpConnectivity
 /// - datamigration:v1 : StaticServiceIpConnectivity
@@ -6490,9 +6579,15 @@ class $EgressSource {
 /// - dataplex:v1 : GoogleCloudDataplexV1CancelJobRequest
 /// - dataplex:v1 : GoogleCloudDataplexV1DataQualityRuleNonNullExpectation
 /// - dataplex:v1 : GoogleCloudDataplexV1DataQualityRuleUniquenessExpectation
+/// - dataplex:v1 : GoogleCloudDataplexV1DataQualitySpecPostScanActionsJobEndTrigger
+/// - dataplex:v1 : GoogleCloudDataplexV1DataQualitySpecPostScanActionsJobFailureTrigger
+/// - dataplex:v1 : GoogleCloudDataplexV1GenerateDataQualityRulesRequest
 /// - dataplex:v1 : GoogleCloudDataplexV1RunDataScanRequest
 /// - dataplex:v1 : GoogleCloudDataplexV1TriggerOnDemand
 /// - dataplex:v1 : GoogleLongrunningCancelOperationRequest
+/// - dataportability:v1 : Empty
+/// - dataportability:v1 : ResetAuthorizationRequest
+/// - dataportability:v1 : RetryPortabilityArchiveRequest
 /// - dataproc:v1 : CancelJobRequest
 /// - dataproc:v1 : Empty
 /// - datastore:v1 : Empty
@@ -6529,8 +6624,10 @@ class $EgressSource {
 /// - dlp:v2 : GooglePrivacyDlpV2ActivateJobTriggerRequest
 /// - dlp:v2 : GooglePrivacyDlpV2AllInfoTypes
 /// - dlp:v2 : GooglePrivacyDlpV2AllOtherBigQueryTables
+/// - dlp:v2 : GooglePrivacyDlpV2AllOtherDatabaseResources
 /// - dlp:v2 : GooglePrivacyDlpV2AllText
 /// - dlp:v2 : GooglePrivacyDlpV2CancelDlpJobRequest
+/// - dlp:v2 : GooglePrivacyDlpV2CloudSqlIamCredential
 /// - dlp:v2 : GooglePrivacyDlpV2Disabled
 /// - dlp:v2 : GooglePrivacyDlpV2FinishDlpJobRequest
 /// - dlp:v2 : GooglePrivacyDlpV2HybridInspectResponse
@@ -6634,6 +6731,7 @@ class $EgressSource {
 /// - iam:v1 : UndeleteWorkloadIdentityPoolProviderKeyRequest
 /// - iam:v1 : UndeleteWorkloadIdentityPoolProviderRequest
 /// - iam:v1 : UndeleteWorkloadIdentityPoolRequest
+/// - iam:v1 : X509
 /// - iap:v1 : Empty
 /// - iap:v1 : ResetIdentityAwareProxyClientSecretRequest
 /// - iap:v1 : ValidateIapAttributeExpressionResponse
@@ -6650,7 +6748,7 @@ class $EgressSource {
 /// - jobs:v4 : Empty
 /// - keep:v1 : Empty
 /// - keep:v1 : Family
-/// - language:v1 : V1Model
+/// - language:v1 : ClassificationModelOptionsV1Model
 /// - licensing:v1 : Empty
 /// - logging:v2 : CancelOperationRequest
 /// - logging:v2 : Empty
@@ -6768,6 +6866,7 @@ class $EgressSource {
 /// - run:v1 : CancelExecutionRequest
 /// - run:v1 : Empty
 /// - run:v2 : GoogleProtobufEmpty
+/// - run:v2 : Proto2BridgeMessageSet
 /// - runtimeconfig:v1 : CancelOperationRequest
 /// - runtimeconfig:v1 : Empty
 /// - safebrowsing:v4 : GoogleProtobufEmpty
@@ -6777,7 +6876,6 @@ class $EgressSource {
 /// - securitycenter:v1 : RunAssetDiscoveryRequest
 /// - serviceconsumermanagement:v1 : CancelOperationRequest
 /// - serviceconsumermanagement:v1 : Empty
-/// - servicecontrol:v2 : ReportResponse
 /// - servicedirectory:v1 : Empty
 /// - servicemanagement:v1 : DeleteServiceStrategy
 /// - servicenetworking:v1 : CancelOperationRequest
@@ -6791,6 +6889,11 @@ class $EgressSource {
 /// - spanner:v1 : Empty
 /// - spanner:v1 : PartitionedDml
 /// - speech:v1 : Empty
+/// - speech:v2 : AutoDetectDecodingConfig
+/// - speech:v2 : InlineOutputConfig
+/// - speech:v2 : NativeOutputFileFormatConfig
+/// - speech:v2 : SrtOutputFileFormatConfig
+/// - speech:v2 : VttOutputFileFormatConfig
 /// - storagetransfer:v1 : CancelOperationRequest
 /// - storagetransfer:v1 : Empty
 /// - storagetransfer:v1 : PauseTransferOperationRequest
@@ -6851,13 +6954,18 @@ class $EgressSource {
 /// - vmmigration:v1 : AdaptingOSStep
 /// - vmmigration:v1 : CancelCloneJobRequest
 /// - vmmigration:v1 : CancelCutoverJobRequest
+/// - vmmigration:v1 : CancelImageImportJobRequest
 /// - vmmigration:v1 : CancelOperationRequest
+/// - vmmigration:v1 : CreatingImageStep
+/// - vmmigration:v1 : DataDiskImageImport
 /// - vmmigration:v1 : DisksMigrationDisksTargetDefaults
 /// - vmmigration:v1 : DisksMigrationDisksTargetDetails
 /// - vmmigration:v1 : Empty
 /// - vmmigration:v1 : FinalizeMigrationRequest
+/// - vmmigration:v1 : InitializingImageImportStep
 /// - vmmigration:v1 : InitializingReplicationStep
 /// - vmmigration:v1 : InstantiatingMigratedVMStep
+/// - vmmigration:v1 : LoadingImageSourceFilesStep
 /// - vmmigration:v1 : PauseMigrationRequest
 /// - vmmigration:v1 : PostProcessingStep
 /// - vmmigration:v1 : PreparingVMDisksStep
@@ -7012,6 +7120,50 @@ class $Entity {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (customFeatures != null) 'customFeatures': customFeatures!,
+      };
+}
+
+/// Used by:
+///
+/// - speech:v1 : Entry
+/// - speech:v2 : Entry
+class $Entry {
+  /// Whether the search is case sensitive.
+  core.bool? caseSensitive;
+
+  /// What to replace with.
+  ///
+  /// Max length is 100 characters.
+  core.String? replace;
+
+  /// What to replace.
+  ///
+  /// Max length is 100 characters.
+  core.String? search;
+
+  $Entry({
+    this.caseSensitive,
+    this.replace,
+    this.search,
+  });
+
+  $Entry.fromJson(core.Map json_)
+      : this(
+          caseSensitive: json_.containsKey('caseSensitive')
+              ? json_['caseSensitive'] as core.bool
+              : null,
+          replace: json_.containsKey('replace')
+              ? json_['replace'] as core.String
+              : null,
+          search: json_.containsKey('search')
+              ? json_['search'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (caseSensitive != null) 'caseSensitive': caseSensitive!,
+        if (replace != null) 'replace': replace!,
+        if (search != null) 'search': search!,
       };
 }
 
@@ -7239,6 +7391,7 @@ class $ExchangeAssignedTargetingOptionDetails {
   /// - "EXCHANGE_CONNATIX" : Connatix.
   /// - "EXCHANGE_RESET_DIGITAL" : Reset Digital.
   /// - "EXCHANGE_HIVESTACK" : Hivestack.
+  /// - "EXCHANGE_DRAX" : Drax.
   /// - "EXCHANGE_APPLOVIN_GBID" : AppLovin MAX.
   /// - "EXCHANGE_FYBER_GBID" : DT Fairbid.
   /// - "EXCHANGE_UNITY_GBID" : Unity LevelPlay.
@@ -7347,6 +7500,7 @@ class $ExchangeConfigEnabledExchange {
   /// - "EXCHANGE_CONNATIX" : Connatix.
   /// - "EXCHANGE_RESET_DIGITAL" : Reset Digital.
   /// - "EXCHANGE_HIVESTACK" : Hivestack.
+  /// - "EXCHANGE_DRAX" : Drax.
   /// - "EXCHANGE_APPLOVIN_GBID" : AppLovin MAX.
   /// - "EXCHANGE_FYBER_GBID" : DT Fairbid.
   /// - "EXCHANGE_UNITY_GBID" : Unity LevelPlay.
@@ -7492,6 +7646,7 @@ class $ExchangeReviewStatus {
   /// - "EXCHANGE_CONNATIX" : Connatix.
   /// - "EXCHANGE_RESET_DIGITAL" : Reset Digital.
   /// - "EXCHANGE_HIVESTACK" : Hivestack.
+  /// - "EXCHANGE_DRAX" : Drax.
   /// - "EXCHANGE_APPLOVIN_GBID" : AppLovin MAX.
   /// - "EXCHANGE_FYBER_GBID" : DT Fairbid.
   /// - "EXCHANGE_UNITY_GBID" : Unity LevelPlay.
@@ -7616,6 +7771,7 @@ class $ExchangeTargetingOptionDetails {
   /// - "EXCHANGE_CONNATIX" : Connatix.
   /// - "EXCHANGE_RESET_DIGITAL" : Reset Digital.
   /// - "EXCHANGE_HIVESTACK" : Hivestack.
+  /// - "EXCHANGE_DRAX" : Drax.
   /// - "EXCHANGE_APPLOVIN_GBID" : AppLovin MAX.
   /// - "EXCHANGE_FYBER_GBID" : DT Fairbid.
   /// - "EXCHANGE_UNITY_GBID" : Unity LevelPlay.
@@ -7669,6 +7825,63 @@ class $ExecAction {
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (command != null) 'command': command!,
+      };
+}
+
+/// Used by:
+///
+/// - datastore:v1 : ExecutionStats
+/// - firestore:v1 : ExecutionStats
+class $ExecutionStats {
+  /// Debugging statistics from the execution of the query.
+  ///
+  /// Note that the debugging stats are subject to change as Firestore evolves.
+  /// It could include: { "indexes_entries_scanned": "1000",
+  /// "documents_scanned": "20", "billing_details" : { "documents_billable":
+  /// "20", "index_entries_billable": "1000", "min_query_cost": "0" } }
+  ///
+  /// The values for Object must be JSON objects. It can consist of `num`,
+  /// `String`, `bool` and `null` as well as `Map` and `List` values.
+  core.Map<core.String, core.Object?>? debugStats;
+
+  /// Total time to execute the query in the backend.
+  core.String? executionDuration;
+
+  /// Total billable read operations.
+  core.String? readOperations;
+
+  /// Total number of results returned, including documents, projections,
+  /// aggregation results, keys.
+  core.String? resultsReturned;
+
+  $ExecutionStats({
+    this.debugStats,
+    this.executionDuration,
+    this.readOperations,
+    this.resultsReturned,
+  });
+
+  $ExecutionStats.fromJson(core.Map json_)
+      : this(
+          debugStats: json_.containsKey('debugStats')
+              ? json_['debugStats'] as core.Map<core.String, core.dynamic>
+              : null,
+          executionDuration: json_.containsKey('executionDuration')
+              ? json_['executionDuration'] as core.String
+              : null,
+          readOperations: json_.containsKey('readOperations')
+              ? json_['readOperations'] as core.String
+              : null,
+          resultsReturned: json_.containsKey('resultsReturned')
+              ? json_['resultsReturned'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (debugStats != null) 'debugStats': debugStats!,
+        if (executionDuration != null) 'executionDuration': executionDuration!,
+        if (readOperations != null) 'readOperations': readOperations!,
+        if (resultsReturned != null) 'resultsReturned': resultsReturned!,
       };
 }
 
@@ -7729,6 +7942,37 @@ class $ExitEvent {
         if (reportingName != null) 'reportingName': reportingName!,
         if (type != null) 'type': type!,
         if (url != null) 'url': url!,
+      };
+}
+
+/// Used by:
+///
+/// - datastore:v1 : ExplainOptions
+/// - firestore:v1 : ExplainOptions
+class $ExplainOptions {
+  /// Whether to execute this query.
+  ///
+  /// When false (the default), the query will be planned, returning only
+  /// metrics from the planning stages. When true, the query will be planned and
+  /// executed, returning the full query results along with both planning and
+  /// execution stage metrics.
+  ///
+  /// Optional.
+  core.bool? analyze;
+
+  $ExplainOptions({
+    this.analyze,
+  });
+
+  $ExplainOptions.fromJson(core.Map json_)
+      : this(
+          analyze: json_.containsKey('analyze')
+              ? json_['analyze'] as core.bool
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (analyze != null) 'analyze': analyze!,
       };
 }
 
@@ -8534,6 +8778,52 @@ class $FrequencyCap {
         if (timeUnit != null) 'timeUnit': timeUnit!,
         if (timeUnitCount != null) 'timeUnitCount': timeUnitCount!,
         if (unlimited != null) 'unlimited': unlimited!,
+      };
+}
+
+/// Used by:
+///
+/// - assuredworkloads:v1 : GoogleCloudAssuredworkloadsV1ViolationRemediationInstructionsGcloud
+/// - cloudcontrolspartner:v1 : Gcloud
+class $Gcloud {
+  /// Additional urls for more information about steps
+  core.List<core.String>? additionalLinks;
+
+  /// Gcloud command to resolve violation
+  core.List<core.String>? gcloudCommands;
+
+  /// Steps to resolve violation via gcloud cli
+  core.List<core.String>? steps;
+
+  $Gcloud({
+    this.additionalLinks,
+    this.gcloudCommands,
+    this.steps,
+  });
+
+  $Gcloud.fromJson(core.Map json_)
+      : this(
+          additionalLinks: json_.containsKey('additionalLinks')
+              ? (json_['additionalLinks'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+          gcloudCommands: json_.containsKey('gcloudCommands')
+              ? (json_['gcloudCommands'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+          steps: json_.containsKey('steps')
+              ? (json_['steps'] as core.List)
+                  .map((value) => value as core.String)
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (additionalLinks != null) 'additionalLinks': additionalLinks!,
+        if (gcloudCommands != null) 'gcloudCommands': gcloudCommands!,
+        if (steps != null) 'steps': steps!,
       };
 }
 
@@ -10178,6 +10468,7 @@ class $HouseholdIncomeTargetingOptionDetails {
 /// - healthcare:v1 : HttpBody
 /// - ml:v1 : GoogleApi__HttpBody
 /// - retail:v2 : GoogleApiHttpBody
+/// - solar:v1 : HttpBody
 class $HttpBody {
   /// The HTTP Content-Type header value specifying the content type of the
   /// body.
@@ -11200,8 +11491,29 @@ class $IssuesRequestPayload {
   /// HTML text.
   core.String? contentOption;
 
+  /// How actions with user input form should be handled.
+  ///
+  /// If not provided, actions will be returned as links that points merchant to
+  /// Merchant Center where they can request the action.
+  ///
+  /// Optional.
+  /// Possible string values are:
+  /// - "USER_INPUT_ACTION_RENDERING_OPTION_UNSPECIFIED" : Default value. Will
+  /// never be provided by the API.
+  /// - "REDIRECT_TO_MERCHANT_CENTER" : Actions that require user input are
+  /// represented only as links that points merchant to Merchant Center where
+  /// they can request the action. Provides easier to implement alternative to
+  /// `BUILT_IN_USER_INPUT_ACTIONS`.
+  /// - "BUILT_IN_USER_INPUT_ACTIONS" : Returns content and input form
+  /// definition for each complex action. Your application needs to display this
+  /// content and input form to the merchant before they can request processing
+  /// of the action. To start the action, your application needs to call the
+  /// `triggeraction` method.
+  core.String? userInputActionOption;
+
   $IssuesRequestPayload({
     this.contentOption,
+    this.userInputActionOption,
   });
 
   $IssuesRequestPayload.fromJson(core.Map json_)
@@ -11209,10 +11521,15 @@ class $IssuesRequestPayload {
           contentOption: json_.containsKey('contentOption')
               ? json_['contentOption'] as core.String
               : null,
+          userInputActionOption: json_.containsKey('userInputActionOption')
+              ? json_['userInputActionOption'] as core.String
+              : null,
         );
 
   core.Map<core.String, core.dynamic> toJson() => {
         if (contentOption != null) 'contentOption': contentOption!,
+        if (userInputActionOption != null)
+          'userInputActionOption': userInputActionOption!,
       };
 }
 
@@ -11376,33 +11693,6 @@ class $KMSEnvMap {
   core.Map<core.String, core.dynamic> toJson() => {
         if (cipherText != null) 'cipherText': cipherText!,
         if (keyName != null) 'keyName': keyName!,
-      };
-}
-
-/// Used by:
-///
-/// - privateca:v1 : CertificateConfigKeyId
-/// - privateca:v1 : KeyId
-class $KeyId {
-  /// The value of this KeyId encoded in lowercase hexadecimal.
-  ///
-  /// This is most likely the 160 bit SHA-1 hash of the public key.
-  ///
-  /// Optional.
-  core.String? keyId;
-
-  $KeyId({
-    this.keyId,
-  });
-
-  $KeyId.fromJson(core.Map json_)
-      : this(
-          keyId:
-              json_.containsKey('keyId') ? json_['keyId'] as core.String : null,
-        );
-
-  core.Map<core.String, core.dynamic> toJson() => {
-        if (keyId != null) 'keyId': keyId!,
       };
 }
 
@@ -11643,6 +11933,7 @@ class $LanguageTargetingOptionDetails {
 
 /// Used by:
 ///
+/// - addressvalidation:v1 : GoogleTypeLatLng
 /// - datastore:v1 : LatLng
 /// - dialogflow:v2 : GoogleTypeLatLng
 /// - dialogflow:v3 : GoogleTypeLatLng
@@ -11652,6 +11943,7 @@ class $LanguageTargetingOptionDetails {
 /// - mybusinessbusinessinformation:v1 : LatLng
 /// - photoslibrary:v1 : LatLng
 /// - places:v1 : GoogleTypeLatLng
+/// - solar:v1 : LatLng
 /// - streetviewpublish:v1 : LatLng
 /// - vision:v1 : LatLng
 class $LatLng {
@@ -12253,6 +12545,7 @@ class $LocalizedMessage {
 /// - run:v1 : Location
 /// - secretmanager:v1 : Location
 /// - servicedirectory:v1 : Location
+/// - speech:v2 : Location
 /// - tpu:v1 : Location
 /// - tpu:v2 : Location
 /// - translate:v3 : Location
@@ -12401,6 +12694,38 @@ class $Location01 {
         if (locationId != null) 'locationId': locationId!,
         if (metadata != null) 'metadata': metadata!,
         if (name != null) 'name': name!,
+      };
+}
+
+/// Used by:
+///
+/// - dlp:v2 : GooglePrivacyDlpV2DataProfileLocation
+/// - dlp:v2 : GooglePrivacyDlpV2DiscoveryStartingLocation
+class $Location02 {
+  /// The ID of the Folder within an organization to scan.
+  core.String? folderId;
+
+  /// The ID of an organization to scan.
+  core.String? organizationId;
+
+  $Location02({
+    this.folderId,
+    this.organizationId,
+  });
+
+  $Location02.fromJson(core.Map json_)
+      : this(
+          folderId: json_.containsKey('folderId')
+              ? json_['folderId'] as core.String
+              : null,
+          organizationId: json_.containsKey('organizationId')
+              ? json_['organizationId'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (folderId != null) 'folderId': folderId!,
+        if (organizationId != null) 'organizationId': organizationId!,
       };
 }
 
@@ -13193,6 +13518,38 @@ class $MobileApp {
 
 /// Used by:
 ///
+/// - dialogflow:v3 : GoogleCloudDialogflowCxV3DataStoreConnectionSignalsAnswerGenerationModelCallSignals
+/// - dialogflow:v3 : GoogleCloudDialogflowCxV3DataStoreConnectionSignalsRewriterModelCallSignals
+class $ModelCallSignals {
+  /// Output of the generative model.
+  core.String? modelOutput;
+
+  /// Prompt as sent to the model.
+  core.String? renderedPrompt;
+
+  $ModelCallSignals({
+    this.modelOutput,
+    this.renderedPrompt,
+  });
+
+  $ModelCallSignals.fromJson(core.Map json_)
+      : this(
+          modelOutput: json_.containsKey('modelOutput')
+              ? json_['modelOutput'] as core.String
+              : null,
+          renderedPrompt: json_.containsKey('renderedPrompt')
+              ? json_['renderedPrompt'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (modelOutput != null) 'modelOutput': modelOutput!,
+        if (renderedPrompt != null) 'renderedPrompt': renderedPrompt!,
+      };
+}
+
+/// Used by:
+///
 /// - aiplatform:v1 : GoogleTypeMoney
 /// - androidpublisher:v3 : Money
 /// - apigee:v1 : GoogleTypeMoney
@@ -13212,6 +13569,7 @@ class $MobileApp {
 /// - places:v1 : GoogleTypeMoney
 /// - recommender:v1 : GoogleTypeMoney
 /// - servicecontrol:v1 : Money
+/// - solar:v1 : Money
 class $Money {
   /// The three-letter currency code defined in ISO 4217.
   core.String? currencyCode;
@@ -15208,6 +15566,74 @@ class $Pipe {
 
 /// Used by:
 ///
+/// - datastore:v1 : PlanSummary
+/// - firestore:v1 : PlanSummary
+class $PlanSummary {
+  /// The indexes selected for the query.
+  ///
+  /// For example: \[ {"query_scope": "Collection", "properties": "(foo ASC,
+  /// __name__ ASC)"}, {"query_scope": "Collection", "properties": "(bar ASC,
+  /// __name__ ASC)"} \]
+  ///
+  /// The values for Object must be JSON objects. It can consist of `num`,
+  /// `String`, `bool` and `null` as well as `Map` and `List` values.
+  core.List<core.Map<core.String, core.Object?>>? indexesUsed;
+
+  $PlanSummary({
+    this.indexesUsed,
+  });
+
+  $PlanSummary.fromJson(core.Map json_)
+      : this(
+          indexesUsed: json_.containsKey('indexesUsed')
+              ? (json_['indexesUsed'] as core.List)
+                  .map((value) => value as core.Map<core.String, core.dynamic>)
+                  .toList()
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (indexesUsed != null) 'indexesUsed': indexesUsed!,
+      };
+}
+
+/// Used by:
+///
+/// - addressvalidation:v1 : GoogleMapsAddressvalidationV1PlusCode
+/// - places:v1 : GoogleMapsPlacesV1PlacePlusCode
+class $PlusCode {
+  /// Place's compound code, such as "33GV+HQ, Ramberg, Norway", containing the
+  /// suffix of the global code and replacing the prefix with a formatted name
+  /// of a reference entity.
+  core.String? compoundCode;
+
+  /// Place's global (full) code, such as "9FWM33GV+HQ", representing an 1/8000
+  /// by 1/8000 degree area (~14 by 14 meters).
+  core.String? globalCode;
+
+  $PlusCode({
+    this.compoundCode,
+    this.globalCode,
+  });
+
+  $PlusCode.fromJson(core.Map json_)
+      : this(
+          compoundCode: json_.containsKey('compoundCode')
+              ? json_['compoundCode'] as core.String
+              : null,
+          globalCode: json_.containsKey('globalCode')
+              ? json_['globalCode'] as core.String
+              : null,
+        );
+
+  core.Map<core.String, core.dynamic> toJson() => {
+        if (compoundCode != null) 'compoundCode': compoundCode!,
+        if (globalCode != null) 'globalCode': globalCode!,
+      };
+}
+
+/// Used by:
+///
 /// - displayvideo:v2 : PoiAssignedTargetingOptionDetails
 /// - displayvideo:v3 : PoiAssignedTargetingOptionDetails
 class $PoiAssignedTargetingOptionDetails {
@@ -15408,6 +15834,7 @@ class $PortConfig {
 
 /// Used by:
 ///
+/// - addressvalidation:v1 : GoogleTypePostalAddress
 /// - cloudchannel:v1 : GoogleTypePostalAddress
 /// - contentwarehouse:v1 : GoogleTypePostalAddress
 /// - documentai:v1 : GoogleTypePostalAddress
@@ -17336,8 +17763,7 @@ class $SdfConfig {
   /// - "SDF_VERSION_6" : SDF version 6
   /// - "SDF_VERSION_7" : SDF version 7. Read the \[v7 migration
   /// guide\](/display-video/api/structured-data-file/v7-migration-guide) before
-  /// migrating to this version. Currently in beta. Only available for use by a
-  /// subset of users.
+  /// migrating to this version.
   core.String? version;
 
   $SdfConfig({
@@ -18752,6 +19178,7 @@ class $StaticRouteConfig {
 /// - sourcerepo:v1 : Status
 /// - spanner:v1 : Status
 /// - speech:v1 : Status
+/// - speech:v2 : Status
 /// - storagetransfer:v1 : Status
 /// - streetviewpublish:v1 : Status
 /// - texttospeech:v1 : Status
@@ -19471,6 +19898,7 @@ class $ThirdPartyVendorConfig {
 /// - businessprofileperformance:v1 : TimeOfDay
 /// - classroom:v1 : TimeOfDay
 /// - dlp:v2 : GoogleTypeTimeOfDay
+/// - gkebackup:v1 : TimeOfDay
 /// - jobs:v3 : TimeOfDay
 /// - jobs:v4 : TimeOfDay
 /// - looker:v1 : TimeOfDay
@@ -20920,6 +21348,9 @@ class $YoutubeAndPartnersBiddingStrategy {
   /// strategy that automatically optimizes conversions per dollar.
   /// - "YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_TARGET_CPM" : A bidding
   /// strategy that pays a configurable amount per impression.
+  /// - "YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_RESERVE_CPM" : A bidding
+  /// strategy for YouTube Instant Reserve line items that pays a fixed amount
+  /// per impression.
   /// - "YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_MAXIMIZE_LIFT" : An
   /// automated bidding strategy that sets bids to achieve maximum lift.
   /// - "YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_MAXIMIZE_CONVERSIONS" : A
@@ -20947,6 +21378,7 @@ class $YoutubeAndPartnersBiddingStrategy {
   /// `YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_MANUAL_CPV` *
   /// `YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_TARGET_CPA` *
   /// `YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_TARGET_CPM` *
+  /// `YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_RESERVE_CPM` *
   /// `YOUTUBE_AND_PARTNERS_BIDDING_STRATEGY_TYPE_TARGET_ROAS` If not using an
   /// applicable strategy, the value of this field will be 0.
   core.String? value;
